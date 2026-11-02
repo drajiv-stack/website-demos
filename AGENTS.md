@@ -26,7 +26,7 @@ The selling point is the combination: **premium, cinematic feel + loads fast on 
 4. **Ship** — commit and push to `main` (Vercel deploys). Then capture gallery screenshots (below) and report the live URL.
 
 ## Integrity (non-negotiable)
-- Footer on every page: `Concept design — fictional company. Website by [STUDIO NAME].`
+- Footer on every page: `Concept design — fictional company. Website by Rajiv Dudeja.`
 - Never invent client logos, testimonials, awards, real buyer names or real certification marks (ISO, APEDA, Spices Board, CE, BIS, OEKO-TEX, GOTS logos). Certificate sections show clearly labelled "Sample certificate" placeholders.
 - Any number shown (capacity, years, volumes) carries a visible "sample figure" label.
 - No TODOs, stubs, "rest of code here" or lorem ipsum. Missing content is shown as `[CONTENT NEEDED: …]` — and none may remain at ship time.
