@@ -2,7 +2,6 @@
 
 import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';
-import { WhatsAppButton } from './WhatsAppButton';
 
 export function HeroVideo() {
   const [videoReady, setVideoReady] = useState(false);
@@ -13,7 +12,6 @@ export function HeroVideo() {
     const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const isDesktop = window.matchMedia('(min-width: 768px)').matches;
     if (prefersReduced || !isDesktop) {
-      // On mobile (< 768px) or reduced-motion, serve static HTML + preloaded WebP poster with zero main-thread JS work
       return;
     }
 
@@ -24,19 +22,20 @@ export function HeroVideo() {
         if (!copyRef.current) return;
         ctx = gsap.context(() => {
           gsap.fromTo(
-            '[data-hero-reveal]',
-            { y: 8 },
+            '[data-hero-line]',
+            { yPercent: 100, opacity: 0 },
             {
-              y: 0,
-              duration: 0.45,
-              stagger: 0.06,
-              ease: 'power2.out',
-              clearProps: 'transform',
+              yPercent: 0,
+              opacity: 1,
+              duration: 0.7,
+              stagger: 0.14,
+              ease: 'power3.out',
+              clearProps: 'transform,opacity',
             }
           );
         }, copyRef);
       });
-    }, 1200);
+    }, 900);
 
     return () => {
       window.clearTimeout(timer);
@@ -47,9 +46,9 @@ export function HeroVideo() {
   return (
     <section
       id="site-hero"
-      className="relative min-h-[82svh] w-full overflow-hidden bg-espresso-deep text-cream flex items-center"
+      className="grain-surface relative min-h-[88svh] w-full overflow-hidden bg-espresso-deep text-cream flex items-end pb-16 pt-28 sm:min-h-[92svh] sm:items-center sm:py-24"
     >
-      {/* LCP Poster Image — pre-compressed 66 KB WebP served directly */}
+      {/* Full-bleed edge-to-edge poster first, then video on desktop */}
       <div className="absolute inset-0 z-0">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
@@ -59,7 +58,7 @@ export function HeroVideo() {
           height={1080}
           fetchPriority="high"
           decoding="sync"
-          className="absolute inset-0 h-full w-full object-cover object-center"
+          className="absolute inset-0 h-full w-full object-cover object-center brightness-75 contrast-110"
         />
 
         {mountVideo && (
@@ -72,7 +71,7 @@ export function HeroVideo() {
             poster="/images/story/hero-poster.webp"
             onCanPlay={() => setVideoReady(true)}
             aria-hidden="true"
-            className={`absolute inset-0 h-full w-full object-cover object-center transition-opacity duration-600 ${
+            className={`absolute inset-0 h-full w-full object-cover object-center brightness-75 contrast-110 transition-opacity duration-700 ${
               videoReady ? 'opacity-100' : 'opacity-0'
             }`}
           >
@@ -81,101 +80,44 @@ export function HeroVideo() {
           </video>
         )}
 
-        {/* Left-weighted editorial gradient so headline has crisp AA contrast */}
+        {/* Darker cinematic grade overlay */}
         <div
           aria-hidden="true"
-          className="absolute inset-0 bg-gradient-to-r from-espresso-deep/95 via-espresso/85 to-espresso/35"
+          className="absolute inset-0 bg-gradient-to-t from-espresso-deep via-espresso-deep/75 to-espresso-deep/45 sm:bg-gradient-to-r sm:from-espresso-deep/95 sm:via-espresso-deep/80 sm:to-espresso-deep/35"
         />
       </div>
 
       <div
         ref={copyRef}
-        className="relative z-10 mx-auto w-full max-w-7xl px-4 py-16 sm:px-6 md:py-24 lg:px-8"
+        className="relative z-10 mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8"
       >
-        <div className="max-w-2xl">
-          <p
-            data-hero-reveal
-            className="inline-flex items-center gap-2 rounded-sm border border-sand/30 bg-espresso/80 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-turmeric"
-          >
-            <span>Kochi Port (INCOK) · Idukki &amp; Wayanad Origin</span>
-          </p>
-
-          <h1
-            data-hero-reveal
-            className="mt-5 font-display text-3xl font-semibold leading-[1.12] tracking-tight text-cream sm:text-5xl lg:text-[3.35rem]"
-          >
-            Whole and ground spices from Kerala&rsquo;s high ranges, lab-tested lot by lot.
+        <div className="max-w-3xl">
+          <h1 className="font-display text-4xl font-semibold leading-[1.06] tracking-tight text-cream sm:text-6xl lg:text-7xl">
+            <span className="block overflow-hidden pb-1">
+              <span data-hero-line className="block">
+                Kerala&rsquo;s harvest,
+              </span>
+            </span>
+            <span className="block overflow-hidden pb-1">
+              <span data-hero-line className="block text-turmeric">
+                shipped whole to the world.
+              </span>
+            </span>
           </h1>
 
-          <p
-            data-hero-reveal
-            className="mt-5 max-w-xl text-base leading-relaxed text-sand sm:text-lg"
-          >
-            Direct from smallholder collection centres in Idukki and Wayanad to importers,
-            private-label packers and food manufacturers across the UAE, UK and USA. Every shipment
-            clears steam sterilisation, aflatoxin HPLC and 500+ pesticide residue screening before
-            container sealing.
+          <p className="mt-6 max-w-xl text-base leading-relaxed text-sand sm:text-lg">
+            Single-origin pepper, cardamom and warming spices from the Western Ghats, cleaned and
+            container-sealed in Kochi.
           </p>
 
-          <div data-hero-reveal className="mt-8 flex flex-wrap items-center gap-3.5">
+          <div className="mt-9">
             <Link
-              href="/contact#rfq-form"
-              className="inline-flex items-center justify-center rounded-sm bg-turmeric px-6 py-3.5 text-sm font-semibold text-espresso shadow-sm transition-colors hover:bg-turmeric-hover"
+              href="#quote"
+              className="inline-flex items-center justify-center rounded-sm bg-turmeric px-7 py-4 text-sm font-semibold text-espresso transition-colors hover:bg-turmeric-hover"
             >
               Request a quote
             </Link>
-
-            <Link
-              href="/products"
-              className="inline-flex items-center justify-center rounded-sm border border-sand/50 bg-espresso/70 px-5 py-3.5 text-sm font-semibold text-cream transition-colors hover:border-cream"
-            >
-              Explore 8 export grades
-            </Link>
-
-            <WhatsAppButton
-              label="WhatsApp Export Desk"
-              className="inline-flex items-center gap-2 rounded-sm border border-turmeric/50 bg-espresso/80 px-4 py-3.5 text-xs font-semibold text-turmeric transition-colors hover:bg-espresso"
-            />
           </div>
-
-          <dl
-            data-hero-reveal
-            className="mt-10 grid grid-cols-2 gap-4 border-t border-sand/25 pt-6 sm:grid-cols-3"
-          >
-            <div>
-              <dt className="text-[11px] font-semibold uppercase tracking-wider text-sand">
-                Standard Lead Time
-              </dt>
-              <dd className="mt-1 font-display text-xl font-semibold text-cream tabular-nums">
-                14–18 Days{' '}
-                <span className="block font-sans text-[11px] font-normal text-sand">
-                  FOB Kochi (sample figure)
-                </span>
-              </dd>
-            </div>
-            <div>
-              <dt className="text-[11px] font-semibold uppercase tracking-wider text-sand">
-                Pesticide &amp; Mycotoxin
-              </dt>
-              <dd className="mt-1 font-display text-xl font-semibold text-cream tabular-nums">
-                500+ MRL Screen{' '}
-                <span className="block font-sans text-[11px] font-normal text-sand">
-                  EU / UK / FDA (sample figure)
-                </span>
-              </dd>
-            </div>
-            <div className="col-span-2 sm:col-span-1">
-              <dt className="text-[11px] font-semibold uppercase tracking-wider text-sand">
-                Container Loadings
-              </dt>
-              <dd className="mt-1 font-display text-xl font-semibold text-cream tabular-nums">
-                LCL &amp; 20&prime;/40&prime; FCL{' '}
-                <span className="block font-sans text-[11px] font-normal text-sand">
-                  2.2k MT/yr capacity (sample figure)
-                </span>
-              </dd>
-            </div>
-          </dl>
         </div>
       </div>
     </section>

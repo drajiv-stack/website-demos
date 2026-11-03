@@ -30,3 +30,4 @@
 | spices | `spices/public/video/hero-desktop.webm` | AI-generated keyframe + FFmpeg slow-motion encode | Owned / generated for this project | 7.5s seamless slow-motion loop (301 KB) |
 | spices | `spices/public/video/hero-mobile.mp4` | AI-generated keyframe + FFmpeg slow-motion encode | Owned / generated for this project | 7.5s seamless slow-motion loop (110 KB) |
 | spices | `spices/public/sample-coa-elakkaya-spices.pdf` | Build-time generated from `lib/products.ts` | Owned / generated for this project | Watermarked SAMPLE Certificate of Analysis PDF |
+| spices | `spices/lib/world-map-data.ts` | https://github.com/nvkelso/natural-earth-vector (`ne_110m_land.geojson`) | Public Domain (CC0 / Natural Earth) | Pre-rendered at build time into 1,883 static SVG land coordinate dots (`WORLD_DOTS_PATH`) |

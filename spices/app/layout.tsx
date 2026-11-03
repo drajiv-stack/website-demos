@@ -73,6 +73,14 @@ export default function RootLayout({
       lang="en"
       className={`${fraunces.variable} ${manrope.variable} h-full antialiased`}
     >
+      <head>
+        <link
+          rel="preload"
+          as="image"
+          href="/images/story/hero-poster.webp"
+          type="image/webp"
+        />
+      </head>
       <body className="min-h-full flex flex-col bg-cream text-espresso">
         <a
           href="#main-content"
