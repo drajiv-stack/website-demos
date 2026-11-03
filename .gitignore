@@ -8,3 +8,4 @@ out/
 !.env.example
 *.log
 .DS_Store
+.chrome-profile/
