@@ -66,7 +66,7 @@ export function HeroVideo() {
           height={720}
           fetchPriority="high"
           decoding="sync"
-          className="absolute inset-0 h-full w-full object-cover object-center brightness-75 contrast-110"
+          className="absolute inset-0 h-full w-full object-cover object-center"
         />
 
         {mountVideo && (
@@ -80,7 +80,7 @@ export function HeroVideo() {
             onLoadedData={() => setVideoReady(true)}
             onCanPlay={() => setVideoReady(true)}
             aria-hidden="true"
-            className={`absolute inset-0 h-full w-full object-cover object-center brightness-75 contrast-110 transition-opacity duration-500 ${
+            className={`absolute inset-0 h-full w-full object-cover object-center transition-opacity duration-500 ${
               videoReady ? 'opacity-100' : 'opacity-0'
             }`}
           >
@@ -95,10 +95,10 @@ export function HeroVideo() {
           </video>
         )}
 
-        {/* Darker cinematic grade overlay */}
+        {/* 10% transparency overlay as requested */}
         <div
           aria-hidden="true"
-          className="absolute inset-0 bg-gradient-to-t from-espresso-deep via-espresso-deep/75 to-espresso-deep/45 sm:bg-gradient-to-r sm:from-espresso-deep/95 sm:via-espresso-deep/80 sm:to-espresso-deep/35"
+          className="absolute inset-0 bg-espresso-deep/10"
         />
       </div>
 
