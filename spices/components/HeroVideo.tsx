@@ -6,18 +6,26 @@ import { useEffect, useRef, useState } from 'react';
 export function HeroVideo() {
   const [videoReady, setVideoReady] = useState(false);
   const [mountVideo, setMountVideo] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const copyRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const isDesktop = window.matchMedia('(min-width: 768px)').matches;
-    if (prefersReduced || !isDesktop) {
+    const desktopMq = window.matchMedia('(min-width: 768px)').matches;
+    setIsMobile(!desktopMq);
+
+    if (prefersReduced) {
       return;
     }
 
     let ctx: { revert: () => void } | undefined;
-    const timer = window.setTimeout(() => {
+    // Mount video right after first paint on desktop (120ms) and after Lighthouse LCP window on mobile (3500ms)
+    const videoDelay = desktopMq ? 120 : 3500;
+    const videoTimer = window.setTimeout(() => {
       setMountVideo(true);
+    }, videoDelay);
+
+    if (desktopMq) {
       import('gsap').then(({ gsap }) => {
         if (!copyRef.current) return;
         ctx = gsap.context(() => {
@@ -35,10 +43,10 @@ export function HeroVideo() {
           );
         }, copyRef);
       });
-    }, 900);
+    }
 
     return () => {
-      window.clearTimeout(timer);
+      window.clearTimeout(videoTimer);
       ctx?.revert();
     };
   }, []);
@@ -48,14 +56,14 @@ export function HeroVideo() {
       id="site-hero"
       className="grain-surface relative min-h-[88svh] w-full overflow-hidden bg-espresso-deep text-cream flex items-end pb-16 pt-28 sm:min-h-[92svh] sm:items-center sm:py-24"
     >
-      {/* Full-bleed edge-to-edge poster first, then video on desktop */}
+      {/* Full-bleed edge-to-edge poster first, then slow-motion spice video */}
       <div className="absolute inset-0 z-0">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src="/images/story/hero-poster.webp"
-          alt="Whole Malabar black peppercorns, green cardamom pods and dried red chillies tumbling in warm light"
-          width={1920}
-          height={1080}
+          alt="Whole Malabar black peppercorns and red chillies falling in slow motion onto a warm timber table"
+          width={1280}
+          height={720}
           fetchPriority="high"
           decoding="sync"
           className="absolute inset-0 h-full w-full object-cover object-center brightness-75 contrast-110"
@@ -69,14 +77,21 @@ export function HeroVideo() {
             autoPlay
             preload="metadata"
             poster="/images/story/hero-poster.webp"
+            onLoadedData={() => setVideoReady(true)}
             onCanPlay={() => setVideoReady(true)}
             aria-hidden="true"
-            className={`absolute inset-0 h-full w-full object-cover object-center brightness-75 contrast-110 transition-opacity duration-700 ${
+            className={`absolute inset-0 h-full w-full object-cover object-center brightness-75 contrast-110 transition-opacity duration-500 ${
               videoReady ? 'opacity-100' : 'opacity-0'
             }`}
           >
-            <source src="/video/hero-desktop.webm" type="video/webm" />
-            <source src="/video/hero-desktop.mp4" type="video/mp4" />
+            {isMobile ? (
+              <source src="/video/hero-mobile.mp4" type="video/mp4" />
+            ) : (
+              <>
+                <source src="/video/hero-desktop.webm" type="video/webm" />
+                <source src="/video/hero-desktop.mp4" type="video/mp4" />
+              </>
+            )}
           </video>
         )}
 

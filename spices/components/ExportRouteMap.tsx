@@ -17,6 +17,7 @@ export function ExportRouteMap() {
       return;
     }
 
+    let isMounted = true;
     let ctx: { revert: () => void } | undefined;
     const el = sectionRef.current;
 
@@ -26,8 +27,8 @@ export function ExportRouteMap() {
         io.disconnect();
         Promise.all([import('gsap'), import('gsap/ScrollTrigger')]).then(
           ([{ gsap }, { ScrollTrigger }]) => {
+            if (!isMounted || !sectionRef.current) return;
             gsap.registerPlugin(ScrollTrigger);
-            if (!sectionRef.current) return;
 
             ctx = gsap.context(() => {
               const paths = gsap.utils.toArray<SVGPathElement>('[data-sea-route]');
@@ -89,6 +90,7 @@ export function ExportRouteMap() {
     io.observe(el);
 
     return () => {
+      isMounted = false;
       io.disconnect();
       ctx?.revert();
     };
