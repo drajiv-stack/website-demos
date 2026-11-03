@@ -1,0 +1,56 @@
+@import "tailwindcss";
+
+@theme {
+  --color-graphite: #14171A;
+  --color-graphite-deep: #0E1013;
+  --color-graphite-light: #1C2126;
+  --color-steel: #8A949C;
+  --color-paper: #ECEEF0;
+  --color-paper-warm: #E2E5E8;
+  --color-molten: #FF5A1F;
+  --color-molten-hover: #E04812;
+
+  --font-display: var(--font-archivo), system-ui, sans-serif;
+  --font-sans: var(--font-archivo), system-ui, sans-serif;
+  --font-mono: var(--font-ibm-plex-mono), monospace;
+}
+
+@layer base {
+  html {
+    background-color: #14171A;
+    color: #ECEEF0;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  :focus-visible {
+    outline: 2px solid #FF5A1F;
+    outline-offset: 2px;
+  }
+}
+
+/* Expanded display headings using Archivo variable width axis */
+.font-display-expanded {
+  font-family: var(--font-archivo), system-ui, sans-serif;
+  font-variation-settings: "wdth" 118;
+}
+
+/* Subtle engineering blueprint grid for technical sections (21st.dev inspired) */
+.cad-grid-dark {
+  background-image:
+    linear-gradient(to right, rgba(138, 148, 156, 0.08) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(138, 148, 156, 0.08) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+
+.cad-grid-light {
+  background-image:
+    linear-gradient(to right, rgba(20, 23, 26, 0.06) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(20, 23, 26, 0.06) 1px, transparent 1px);
+  background-size: 48px 48px;
+}

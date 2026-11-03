@@ -1,6 +1,6 @@
 # Demo 2 Plan — Precision Castings & Machined Components (`castings/`)
 
-**Status:** Awaiting User Approval  
+**Status:** APPROVED (`Kinesis Cast & Machine Works`)  
 **Fiverr Package Mapping:** Standard Package + per-product build-time PDF spec sheets  
 **Target Buyers:** OEM procurement managers, sourcing engineers, and industrial distributors in **Germany** (Stuttgart, Munich, Hamburg) and the **USA** (Midwest / Great Lakes, Houston).  
 **Tone:** Precise · engineered · no-nonsense.
