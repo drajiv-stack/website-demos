@@ -1,0 +1,62 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [3 0 R] /Count 1 >>
+endobj
+3 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 4 0 R >> >> /Contents 5 0 R >>
+endobj
+4 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Courier >>
+endobj
+5 0 obj
+<< /Length 2265 >>
+stream
+BT
+/F1 10 Tf
+42 780 Td
+14 TL
+(SAMPLE CERTIFICATE OF ANALYSIS — FICTIONAL COMPANY) Tj T*
+(====================================================================) Tj T*
+(Exporter:        Elakkaya Spice Exports, Willingdon Island, Kochi [fictional]) Tj T*
+(Product:         Malabar Garbled Black Pepper — 550 GL \(Steam-Sterilised\)) Tj T*
+(Botanical Name:  Piper nigrum L.               HS Code: 0904) Tj T*
+(Lot Code:        ELK-BP550-2026-108 \(sample\)   Sampled: ISO 948 Spear) Tj T*
+(Port of Loading: Kochi \(INCOK\)                 Packing: 25 kg Kraft Bag) Tj T*
+(--------------------------------------------------------------------) Tj T*
+(PARAMETER                        METHOD              SPEC        RESULT \(SAMPLE\)) Tj T*
+(--------------------------------------------------------------------) Tj T*
+(Bulk Density \(g/L\)               ASTA 14.0           >= 550      556 g/L \(sample\)) Tj T*
+(Moisture \(% w/w\)                 ISO 939             <= 11.0%    10.2% \(sample\)) Tj T*
+(Volatile Oil \(% v/w\)             ASTA 5.0            >= 2.5%     3.2% \(sample\)) Tj T*
+(Piperine Content \(% w/w\)         HPLC                >= 4.5%     5.1% \(sample\)) Tj T*
+(Extraneous Matter \(% w/w\)        ISO 927             <= 0.5%     0.18% \(sample\)) Tj T*
+(Light Berries \(% w/w\)            Floatation          <= 2.0%     1.1% \(sample\)) Tj T*
+(Aflatoxin B1 \(ug/kg\)             AOAC 991.31 HPLC    < 5.0       < 1.0 LOQ \(sample\)) Tj T*
+(Aflatoxin Total B1+B2+G1+G2      AOAC 991.31 HPLC    < 10.0      < 2.0 LOQ \(sample\)) Tj T*
+(Multi-Residue Pesticides \(500+\)  LC-MS/MS & GC-MS/MS EU/FDA MRL  Compliant \(sample\)) Tj T*
+(Total Plate Count \(CFU/g\)        ISO 4833-1          < 10,000    2,400 CFU/g \(sample\)) Tj T*
+(Yeasts & Moulds \(CFU/g\)          ISO 21527-2         < 100       < 40 CFU/g \(sample\)) Tj T*
+(Escherichia coli \(CFU/g\)         ISO 16649-2         < 10        Absent \(sample\)) Tj T*
+(Salmonella spp. \(/25g & /375g\)   ISO 6579-1          Absent      Absent \(sample\)) Tj T*
+(--------------------------------------------------------------------) Tj T*
+(WATERMARK: SAMPLE DOCUMENT — FICTIONAL COMPANY FOR PORTFOLIO DEMO ONLY.) Tj T*
+(Concept design — fictional company. Website by Rajiv Dudeja.) Tj T*
+ET
+endstream
+endobj
+xref
+0 6
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000115 00000 n 
+0000000241 00000 n 
+0000000309 00000 n 
+trailer
+<< /Size 6 /Root 1 0 R >>
+startxref
+2626
+%%EOF
