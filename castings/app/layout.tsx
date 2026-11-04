@@ -15,9 +15,10 @@ const archivo = Archivo({
 
 const ibmPlexMono = IBM_Plex_Mono({
   subsets: ['latin'],
-  weight: ['400', '500', '600'],
+  weight: ['400', '600'],
   variable: '--font-ibm-plex-mono',
   display: 'swap',
+  preload: false,
 });
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://kinesis-castings.vercel.app';
@@ -73,6 +74,14 @@ export default function RootLayout({
 
   return (
     <html lang="en" className={`${archivo.variable} ${ibmPlexMono.variable}`}>
+      <head>
+        <link
+          rel="preload"
+          as="image"
+          href="/images/hero/foundry-hero-poster.webp"
+          fetchPriority="high"
+        />
+      </head>
       <body className="min-h-screen flex flex-col bg-graphite text-paper selection:bg-molten selection:text-graphite">
         <a
           href="#main-content"

@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { PROCESS_STAGES } from '@/lib/products';
 
 export function ProcessLineSection() {
@@ -9,13 +9,13 @@ export function ProcessLineSection() {
   const pinWrapRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
   const progressRef = useRef<HTMLDivElement>(null);
+  const [mountSparksVideo, setMountSparksVideo] = useState(false);
 
   useEffect(() => {
     const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const isDesktop = window.matchMedia('(min-width: 768px)').matches;
     if (
       prefersReduced ||
-      !isDesktop ||
       !outerRef.current ||
       !pinWrapRef.current ||
       !('IntersectionObserver' in window)
@@ -31,40 +31,56 @@ export function ProcessLineSection() {
       ([entry]) => {
         if (!entry.isIntersecting) return;
         io.disconnect();
+        if (isDesktop) {
+          setMountSparksVideo(true);
+        }
         Promise.all([import('gsap'), import('gsap/ScrollTrigger')]).then(
           ([{ gsap }, { ScrollTrigger }]) => {
             if (!isMounted || !pinWrapRef.current || !trackRef.current) return;
             gsap.registerPlugin(ScrollTrigger);
 
             ctx = gsap.context(() => {
-              const totalPanels = PROCESS_STAGES.length;
-              const tl = gsap.timeline({
-                scrollTrigger: {
-                  trigger: pinWrapRef.current,
-                  pin: true,
-                  scrub: 0.6,
-                  start: 'top top',
-                  end: () => `+=${window.innerWidth * 3.2}`,
-                  invalidateOnRefresh: true,
-                },
-              });
+              if (isDesktop) {
+                const totalPanels = PROCESS_STAGES.length;
+                const tl = gsap.timeline({
+                  scrollTrigger: {
+                    trigger: pinWrapRef.current,
+                    pin: true,
+                    scrub: 0.6,
+                    start: 'top top',
+                    end: () => `+=${window.innerWidth * 3.2}`,
+                    invalidateOnRefresh: true,
+                  },
+                });
 
-              tl.to(
-                trackRef.current,
-                {
-                  xPercent: -100 * ((totalPanels - 1) / totalPanels),
-                  ease: 'none',
-                },
-                0
-              );
-
-              if (progressRef.current) {
-                tl.fromTo(
-                  progressRef.current,
-                  { scaleX: 1 / totalPanels },
-                  { scaleX: 1, ease: 'none' },
+                tl.to(
+                  trackRef.current,
+                  {
+                    xPercent: -100 * ((totalPanels - 1) / totalPanels),
+                    ease: 'none',
+                  },
                   0
                 );
+
+                // Parallax zoom-out on stage images as the horizontal track glides
+                const stageImgs = gsap.utils.toArray<HTMLElement>('[data-stage-media]');
+                stageImgs.forEach((img) => {
+                  tl.fromTo(
+                    img,
+                    { scale: 1.18 },
+                    { scale: 1, ease: 'none' },
+                    0
+                  );
+                });
+
+                if (progressRef.current) {
+                  tl.fromTo(
+                    progressRef.current,
+                    { scaleX: 1 / totalPanels },
+                    { scaleX: 1, ease: 'none' },
+                    0
+                  );
+                }
               }
             }, outerRef);
           }
@@ -93,16 +109,16 @@ export function ProcessLineSection() {
         One roof from wax to crate.
       </h2>
 
-      {/* Inner pin wrapper so ScrollTrigger's pin-spacer stays strictly inside <section> and never conflicts with React's root unmount */}
+      {/* Inner pin wrapper so ScrollTrigger's pin-spacer stays strictly inside <section> */}
       <div ref={pinWrapRef} className="relative w-full overflow-hidden">
         {/* Top Molten Progress Bar (Desktop) */}
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute inset-x-0 top-0 z-20 hidden h-1 bg-steel/20 md:block"
+          className="pointer-events-none absolute inset-x-0 top-0 z-20 hidden h-1.5 bg-steel/20 md:block"
         >
           <div
             ref={progressRef}
-            className="h-full w-full origin-left scale-x-[0.166] bg-molten"
+            className="h-full w-full origin-left scale-x-[0.166] bg-molten shadow-[0_0_16px_#FF5A1F]"
           />
         </div>
 
@@ -110,18 +126,40 @@ export function ProcessLineSection() {
           ref={trackRef}
           className="flex flex-col md:h-svh md:w-[600vw] md:flex-row"
         >
-          {PROCESS_STAGES.map((stage) => (
+          {PROCESS_STAGES.map((stage, idx) => (
             <article
               key={stage.step}
-              className="relative flex min-h-[68svh] w-full items-end overflow-hidden border-b border-steel/20 p-6 sm:p-12 md:h-svh md:w-screen md:shrink-0 md:border-b-0 md:border-r lg:p-20"
+              className="relative flex min-h-[70svh] w-full items-end overflow-hidden border-b border-steel/20 p-6 sm:p-12 md:h-svh md:w-screen md:shrink-0 md:border-b-0 md:border-r lg:p-20"
             >
-              <Image
-                src={stage.image}
-                alt={stage.alt}
-                fill
-                sizes="100vw"
-                className="object-cover opacity-55 contrast-110"
-              />
+              <div
+                data-stage-media
+                className="absolute inset-0 will-change-transform"
+              >
+                <Image
+                  src={stage.image}
+                  alt={stage.alt}
+                  fill
+                  sizes="100vw"
+                  className="object-cover opacity-55 contrast-110"
+                />
+
+                {/* Stage 04 (Machine) also plays live CNC welding/cutting sparks video on desktop */}
+                {idx === 3 && mountSparksVideo && (
+                  <video
+                    muted
+                    playsInline
+                    loop
+                    autoPlay
+                    preload="none"
+                    poster={stage.image}
+                    aria-hidden="true"
+                    className="absolute inset-0 h-full w-full object-cover opacity-65 mix-blend-screen"
+                  >
+                    <source src="/video/cnc-sparks.mp4" type="video/mp4" />
+                  </video>
+                )}
+              </div>
+
               <div
                 aria-hidden="true"
                 className="absolute inset-0 bg-gradient-to-t from-graphite via-graphite/60 to-transparent"

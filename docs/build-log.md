@@ -10,6 +10,7 @@
 | castings | plan | 2026-11-03 13:24 | 2026-11-03 15:36 | 0.4 | Plan approved with name "Kinesis Cast & Machine Works" + Content Diet + 21st.dev aesthetic |
 | castings | build | 2026-11-03 15:37 | 2026-11-03 15:53 | 0.3 | Next.js 16 SSG (18/18 static routes), 23 WebP images + 9 PDFs built & credited |
 | castings | review + fixes | 2026-11-03 15:53 | 2026-11-03 16:08 | 0.25 | 2 passes: Perf 86-94, A11y 100, BP 100, LCP 2.5s, CLS 0.00, TBT 50ms, JS 129.2 KB gzip |
+| castings | motion & video uplift | 2026-11-04 17:45 | 2026-11-04 18:16 | 0.5 | Added molten furnace hero video, rising ember particles, rotating CAD HUD reticle, pinned X-Ray CAD zoom inspector with laser scan beam, asymmetric Bento matrix with scroll parallax, and live CNC cutting sparks video (Mobile Perf 95) |
 | textiles | plan | 2026-11-03 16:13 | 2026-11-03 16:15 | 0.1 | Plan written (`docs/textiles/plan.md`) with Content Diet + EN/DE + Admin Panel |
 | textiles | build | | | | |
 | textiles | review + fixes | | | | |
