@@ -1,0 +1,78 @@
+@import "tailwindcss";
+
+@theme {
+  --color-linen: #F4F1EA;
+  --color-alabaster: #FAF8F4;
+  --color-linen-warm: #EAE5DA;
+  --color-ink: #1F2430;
+  --color-ink-deep: #151922;
+  --color-stone: #B9B2A5;
+  --color-stone-dark: #524E46;
+  --color-indigo: #2E3A8C;
+  --color-indigo-hover: #222C6E;
+  --color-indigo-soft: #E5E8F6;
+
+  --font-display: var(--font-newsreader), Georgia, serif;
+  --font-sans: var(--font-hanken-grotesk), system-ui, -apple-system, sans-serif;
+}
+
+@layer base {
+  html {
+    background-color: var(--color-linen);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: var(--color-linen);
+    color: var(--color-ink);
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-indigo);
+    outline-offset: 3px;
+  }
+}
+
+/* Tactile fine linen warp/weft micro-grid for daylight showroom surfaces */
+.linen-weave-surface {
+  background-image:
+    linear-gradient(to right, rgba(31, 36, 48, 0.035) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(31, 36, 48, 0.035) 1px, transparent 1px);
+  background-size: 28px 28px;
+}
+
+/* Subtle woven texture on dark ink atelier sections */
+.ink-weave-surface {
+  background-image:
+    linear-gradient(to right, rgba(244, 241, 234, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(244, 241, 234, 0.04) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+
+/* Stitched care-label border */
+.stitched-border {
+  background-image: repeating-linear-gradient(
+    90deg,
+    #2E3A8C 0,
+    #2E3A8C 6px,
+    transparent 6px,
+    transparent 11px
+  );
+  background-size: 100% 1.5px;
+  background-repeat: no-repeat;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

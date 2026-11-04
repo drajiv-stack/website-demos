@@ -11,8 +11,8 @@
 | castings | build | 2026-11-03 15:37 | 2026-11-03 15:53 | 0.3 | Next.js 16 SSG (18/18 static routes), 23 WebP images + 9 PDFs built & credited |
 | castings | review + fixes | 2026-11-03 15:53 | 2026-11-03 16:08 | 0.25 | 2 passes: Perf 86-94, A11y 100, BP 100, LCP 2.5s, CLS 0.00, TBT 50ms, JS 129.2 KB gzip |
 | castings | motion & video uplift | 2026-11-04 17:45 | 2026-11-04 18:16 | 0.5 | Added molten furnace hero video, rising ember particles, rotating CAD HUD reticle, pinned X-Ray CAD zoom inspector with laser scan beam, asymmetric Bento matrix with scroll parallax, and live CNC cutting sparks video (Mobile Perf 95) |
-| textiles | plan | 2026-11-03 16:13 | 2026-11-03 16:15 | 0.1 | Plan written (`docs/textiles/plan.md`) with Content Diet + EN/DE + Admin Panel |
-| textiles | build | | | | |
-| textiles | review + fixes | | | | |
+| textiles | plan | 2026-11-03 16:13 | 2026-11-04 20:03 | 0.4 | 5-Act Interactive Showroom & Live Swatch-Book Assembler plan approved for "NoolWeave Exports" |
+| textiles | build | 2026-11-04 20:03 | 2026-11-05 00:25 | 0.8 | Next.js 16 SSG (38/38 static routes), 5-Act Showroom, continuous indigo thread, 28 WebP assets + 4 videos encoded |
+| textiles | review + fixes | 2026-11-05 00:25 | 2026-11-05 01:10 | 0.7 | 2 review passes: Perf 97, A11y 96+, BP 96+, CLS 0.00, LCP 1.7s, TBT 80ms, JS 129.4 KB gzip; Vercel deployment live |
 
 Target: under 4-5 hours of your own time per demo for the $150 Basic package to be profitable.
