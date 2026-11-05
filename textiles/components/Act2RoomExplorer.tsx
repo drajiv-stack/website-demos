@@ -26,16 +26,16 @@ export function Act2RoomExplorer({ lang }: { lang: Locale }) {
     <section
       id="room-explorer"
       aria-labelledby="room-explorer-heading"
-      className="relative border-b border-stone/45 bg-alabaster py-16 text-ink sm:py-24 lg:pl-16"
+      className="relative border-b border-stone/45 bg-alabaster py-20 text-ink sm:py-28"
     >
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Editorial Header */}
-        <div className="mb-10 grid grid-cols-1 items-end gap-6 lg:grid-cols-12">
+        <div className="mb-12 grid grid-cols-1 items-end gap-6 lg:grid-cols-12">
           <div className="lg:col-span-7">
             <p className="text-xs font-semibold uppercase tracking-[0.22em] text-indigo">
               {lang === 'de'
-                ? 'AKT II · INTERAKTIVES RAUM-PANORAMA'
-                : 'ACT II · INTERACTIVE ROOM HOTSPOT SHOWROOM'}
+                ? 'INTERAKTIVES RAUM-PANORAMA'
+                : 'ROOM SHOWROOM'}
             </p>
             <h2
               id="room-explorer-heading"
@@ -43,21 +43,20 @@ export function Act2RoomExplorer({ lang }: { lang: Locale }) {
             >
               {lang === 'de' ? (
                 <>
-                  Tippen Sie auf einen <span className="italic text-indigo">Indigo-Knoten</span> im Raum.
+                  Tippen Sie auf einen <span className="italic text-indigo">Knoten</span> im Raum.
                 </>
               ) : (
                 <>
-                  Select any <span className="italic text-indigo">Indigo node</span> inside the room.
+                  Select any <span className="italic text-indigo">node</span> inside the room.
                 </>
               )}
             </h2>
           </div>
           <div className="lg:col-span-5">
-            {/* Max ~40 words body text per Content Diet */}
             <p className="text-sm leading-relaxed text-stone-dark sm:text-base">
               {lang === 'de'
-                ? 'Prüfen Sie Gewebestruktur und regionale Maße direkt am bezogenen Bett und fügen Sie Handmuster Ihrem persönlichen Musterbuch hinzu.'
-                : 'Inspect weave structure and regional cut dimensions directly on the styled bed, then pin fabric cuttings straight to your sample swatch book.'}
+                ? 'Prüfen Sie Gewebe und Maße direkt am Bett.'
+                : 'Inspect weave structure and cut dimensions directly on the styled bed.'}
             </p>
           </div>
         </div>
@@ -116,7 +115,7 @@ export function Act2RoomExplorer({ lang }: { lang: Locale }) {
                     }}
                     aria-label={lang === 'de' ? pin.title_de : pin.title_en}
                     aria-pressed={selected}
-                    className={`group absolute -translate-x-1/2 -translate-y-1/2 flex items-center gap-2 rounded-full px-3 py-1.5 text-xs font-semibold shadow-lg transition-transform duration-200 ${
+                    className={`group absolute -translate-x-1/2 -translate-y-1/2 flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-semibold shadow-lg transition-transform duration-200 ${
                       selected
                         ? 'scale-110 bg-indigo text-alabaster ring-4 ring-alabaster/80'
                         : 'bg-alabaster/95 text-ink hover:scale-105 hover:bg-indigo hover:text-alabaster'
@@ -125,22 +124,17 @@ export function Act2RoomExplorer({ lang }: { lang: Locale }) {
                     <span className="font-mono text-[11px] font-bold">
                       {pin.pinNumber}
                     </span>
-                    <span className="hidden sm:inline">
-                      { (lang === 'de' ? pin.title_de : pin.title_en).split(' ').slice(0, 2).join(' ') }
-                    </span>
                   </button>
                 );
               })}
 
               {/* Bottom Room Bar */}
               <div className="absolute bottom-3 left-3 right-3 flex flex-wrap items-center justify-between gap-2 rounded-xs bg-alabaster/95 px-3.5 py-2 text-xs text-ink backdrop-blur-xs">
-                <span className="font-medium">
-                  {lang === 'de'
-                    ? '4 Kollektionsstücke im Raum verknüpft'
-                    : '4 textile pieces linked along the Indigo Warp Thread'}
-                </span>
                 <span className="font-semibold text-indigo">
-                  {activeShowroom.flag} {activeShowroom.duvet_size}
+                  {activeShowroom.flag} {activeShowroom.duvet_size.split('·')[0]}
+                </span>
+                <span className="text-stone-dark">
+                  {activeShowroom.incoterm}
                 </span>
               </div>
             </div>
@@ -172,24 +166,13 @@ export function Act2RoomExplorer({ lang }: { lang: Locale }) {
                 {lang === 'de' ? activePin.title_de : activePin.title_en}
               </h3>
 
-              <p className="mt-1 text-xs font-medium uppercase tracking-wider text-stone-dark">
-                {lang === 'de' ? activePin.weave_de : activePin.weave_en}
-              </p>
-
-              {/* Regional Size Cut Box */}
               <div className="mt-4 rounded-xs border border-stone/50 bg-alabaster p-3 text-xs">
                 <div className="flex items-center justify-between">
                   <span className="text-stone-dark">
-                    {lang === 'de' ? 'Markt-Konfektion:' : 'Regional Cut:'}
+                    {lang === 'de' ? 'Konfektion:' : 'Cut:'}
                   </span>
                   <span className="font-semibold text-ink">
                     {activeShowroom.flag} {activeShowroom.duvet_size.split('·')[0]}
-                  </span>
-                </div>
-                <div className="mt-1.5 flex items-center justify-between">
-                  <span className="text-stone-dark">Incoterm:</span>
-                  <span className="font-semibold text-indigo">
-                    {activeShowroom.incoterm}
                   </span>
                 </div>
               </div>

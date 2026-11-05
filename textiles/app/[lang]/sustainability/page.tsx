@@ -74,7 +74,7 @@ export default async function SustainabilityPage({
         image="/images/weaves/macro-linen.webp"
         imageAlt={de ? 'Nahaufnahme von Leinengewebe' : 'Macro view of linen weave'}
       />
-      <section className="bg-linen py-14 sm:py-20 lg:pl-16">
+      <section className="bg-linen py-14 sm:py-20 ">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <h2 className="font-display text-3xl font-normal text-ink sm:text-4xl">
             {de ? 'Zertifikate auf Anfrage.' : 'Certificates on request.'}

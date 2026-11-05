@@ -120,7 +120,7 @@ export function CollectionsLookbook({
   const visible = filter === 'All' ? products : products.filter((p) => p.category === filter);
 
   return (
-    <section className="bg-alabaster py-14 sm:py-20 lg:pl-16">
+    <section className="bg-alabaster py-14 sm:py-20 ">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Filter + Regional size toggle */}
         <div className="mb-12 flex flex-col gap-4 border-b border-stone/45 pb-6 lg:flex-row lg:items-center lg:justify-between">

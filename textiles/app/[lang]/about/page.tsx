@@ -46,7 +46,7 @@ export default async function AboutPage({
         }
       />
 
-      <section className="bg-ink py-14 text-linen sm:py-20 lg:pl-16">
+      <section className="bg-ink py-14 text-linen sm:py-20 ">
         <div className="mx-auto grid max-w-7xl grid-cols-1 items-center gap-10 px-4 sm:px-6 lg:grid-cols-12 lg:px-8">
           <div className="relative aspect-video overflow-hidden rounded-sm border border-stone/30 lg:col-span-7">
             <video
@@ -92,7 +92,7 @@ export default async function AboutPage({
         imageAlt={de ? 'Perkal-Bettwäsche' : 'Percale duvet set'}
       />
 
-      <section className="bg-alabaster py-14 sm:py-20 lg:pl-16">
+      <section className="bg-alabaster py-14 sm:py-20 ">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <h2 className="font-display text-3xl font-normal text-ink sm:text-4xl">
             {de ? 'Drei Exportkorridore.' : 'Three export lanes.'}

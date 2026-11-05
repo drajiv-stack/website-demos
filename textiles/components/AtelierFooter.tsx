@@ -3,7 +3,7 @@ import { COMPANY, COUNTRY_SHOWROOMS, type Locale } from '@/lib/products';
 
 export function AtelierFooter({ lang }: { lang: Locale }) {
   return (
-    <footer className="border-t border-stone/50 bg-ink-deep pb-24 pt-14 text-linen md:pb-16 lg:pl-16">
+    <footer className="border-t border-stone/50 bg-ink-deep pb-24 pt-14 text-linen md:pb-16">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 gap-10 pb-10 md:grid-cols-12">
           {/* Col 1: Brand & Address */}

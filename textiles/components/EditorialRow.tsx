@@ -24,7 +24,7 @@ export function EditorialRow({
   const bg =
     tone === 'linen' ? 'bg-linen' : tone === 'warm' ? 'bg-linen-warm' : 'bg-alabaster';
   return (
-    <section className={`${bg} border-b border-stone/40 py-14 sm:py-20 lg:pl-16`}>
+    <section className={`${bg} border-b border-stone/40 py-14 sm:py-20 `}>
       <div className="mx-auto grid max-w-7xl grid-cols-1 items-center gap-10 px-4 sm:px-6 lg:grid-cols-12 lg:px-8">
         <div className={`lg:col-span-7 ${flip ? 'lg:order-2' : ''}`}>
           <div className="relative aspect-16/10 w-full overflow-hidden rounded-sm border border-stone/55 shadow-sm">
@@ -61,7 +61,7 @@ export function CtaBand({
   href: string;
 }) {
   return (
-    <section className="bg-ink py-14 text-linen lg:pl-16">
+    <section className="bg-ink py-14 text-linen ">
       <div className="mx-auto flex max-w-7xl flex-col items-start justify-between gap-6 px-4 sm:px-6 md:flex-row md:items-center lg:px-8">
         <h2 className="font-display text-3xl font-normal leading-tight sm:text-4xl">
           {lang === 'de' ? (

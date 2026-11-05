@@ -96,9 +96,10 @@ export default async function LocaleLayout({
         <link
           rel="preload"
           as="image"
-          href="/images/hero/hero-bedroom-poster.webp"
+          href="/images/hero/hero-macro-to-room.webp"
           fetchPriority="high"
         />
+        <link rel="icon" href="/favicon.ico" sizes="any" />
       </head>
       <body className="flex min-h-screen flex-col bg-linen text-ink selection:bg-indigo selection:text-alabaster">
         <script

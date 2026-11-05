@@ -175,7 +175,7 @@ export function ProcessLineSection() {
                   </h3>
                 </div>
 
-                <p className="max-w-md text-base leading-relaxed text-paper/85 sm:text-xl">
+                <p className="max-w-xl text-base leading-snug text-paper/85 sm:text-lg">
                   {stage.line}
                 </p>
               </div>

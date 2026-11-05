@@ -18,20 +18,20 @@ export function Act4RetailReadiness({ lang }: { lang: Locale }) {
     {
       id: 'labels',
       tag: '01',
-      label_en: 'Woven Neck & Bilingual Care Labels',
-      label_de: 'Webetiketten & Zweisprachige Pflegeetiketten',
+      label_en: 'Labels & Care Ribbons',
+      label_de: 'Etiketten & Pflegebänder',
     },
     {
       id: 'packaging',
       tag: '02',
-      label_en: 'Shelf-Ready Belly Bands & EAN Barcodes',
-      label_de: 'Verkaufsfertige Banderolen & EAN-Barcodes',
+      label_en: 'Packaging & Barcodes',
+      label_de: 'Banderolen & Barcodes',
     },
     {
       id: 'looms',
       tag: '03',
-      label_en: 'Karur Air-Jet Loom Hall & Sample Certificates',
-      label_de: 'Luftdüsen-Websaal Karur & Musterzertifikate',
+      label_en: 'Loom Hall & Sample Certs',
+      label_de: 'Websaal & Muster-Zertifikate',
     },
   ];
 
@@ -39,16 +39,16 @@ export function Act4RetailReadiness({ lang }: { lang: Locale }) {
     <section
       id="retail-readiness"
       aria-labelledby="retail-readiness-heading"
-      className="linen-weave-surface relative border-b border-stone/45 bg-linen-warm py-16 text-ink sm:py-24 lg:pl-16"
+      className="linen-weave-surface relative border-b border-stone/45 bg-linen-warm py-20 text-ink sm:py-28"
     >
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <div className="mb-10 grid grid-cols-1 items-end gap-6 lg:grid-cols-12">
+        <div className="mb-12 grid grid-cols-1 items-end gap-6 lg:grid-cols-12">
           <div className="lg:col-span-7">
             <p className="text-xs font-semibold uppercase tracking-[0.22em] text-indigo">
               {lang === 'de'
-                ? 'AKT IV · EIGENMARKEN-KONFEKTION & WEBSAAL KARUR'
-                : 'ACT IV · PRIVATE-LABEL RETAIL READINESS & KARUR MILL'}
+                ? 'EIGENMARKEN & WEBSAAL'
+                : 'PACKAGING & LOOM HALL'}
             </p>
             <h2
               id="retail-readiness-heading"
@@ -56,21 +56,20 @@ export function Act4RetailReadiness({ lang }: { lang: Locale }) {
             >
               {lang === 'de' ? (
                 <>
-                  Vom <span className="italic text-indigo">240-Webstuhl-Saal†</span> direkt ins Kaufhausregal.
+                  Vom <span className="italic text-indigo">240-Webstuhl-Saal†</span> ins Regal.
                 </>
               ) : (
                 <>
-                  From our <span className="italic text-indigo">240-loom hall†</span> straight to your retail shelf.
+                  From our <span className="italic text-indigo">240-loom hall†</span> to your shelf.
                 </>
               )}
             </h2>
           </div>
           <div className="lg:col-span-5">
-            {/* Max ~40 words body text per Content Diet */}
             <p className="text-sm leading-relaxed text-stone-dark sm:text-base">
               {lang === 'de'
-                ? 'Jede Sendung verlässt Karur komplett etikettiert, gebügelt und mit länderspezifischen Größenaufklebern und EAN-Codes versehen.'
-                : 'Every shipment leaves Karur woven, stitched with your brand neck label, and packed with regional size stickers and EAN barcodes.'}
+                ? 'Komplett gewebt, genäht und etikettiert nach Ihren Vorgaben.'
+                : 'Woven, stitched, and barcoded ready for distribution.'}
             </p>
           </div>
         </div>

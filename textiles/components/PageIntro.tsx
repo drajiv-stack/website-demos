@@ -16,7 +16,7 @@ export function PageIntro({
   imageAlt?: string;
 }) {
   return (
-    <section className="linen-weave-surface border-b border-stone/45 bg-linen lg:pl-16">
+    <section className="linen-weave-surface border-b border-stone/45 bg-linen ">
       <div className="mx-auto grid max-w-7xl grid-cols-1 items-end gap-8 px-4 py-14 sm:px-6 sm:py-20 lg:grid-cols-12 lg:px-8">
         <div className={image ? 'lg:col-span-7' : 'lg:col-span-9'}>
           <p className="text-xs font-semibold uppercase tracking-[0.22em] text-indigo">

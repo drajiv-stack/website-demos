@@ -22,8 +22,8 @@ const CALLOUT_ZONES: CalloutZone[] = [
   {
     id: 'alloy',
     code: 'DATUM A',
-    label: '316 Stainless',
-    detail: 'Silica-sol lost-wax shell body',
+    label: 'Flange Face',
+    detail: 'Perpendicularity to 0.04 mm† across face',
     cx: 290,
     cy: 245,
     r: 36,
@@ -36,8 +36,8 @@ const CALLOUT_ZONES: CalloutZone[] = [
   {
     id: 'bore',
     code: 'DATUM B',
-    label: 'Bore ±0.03 mm†',
-    detail: 'Five-axis interpolated sealing bore',
+    label: 'Bore Datum (±0.03 mm†)',
+    detail: 'Five-axis interpolated internal sealing bore',
     cx: 495,
     cy: 265,
     r: 52,
@@ -50,8 +50,8 @@ const CALLOUT_ZONES: CalloutZone[] = [
   {
     id: 'seat',
     code: 'DATUM C',
-    label: 'Mirror Seat',
-    detail: 'Lapped spiral-wound gasket face',
+    label: 'Mounting Flange',
+    detail: 'Bolt-hole circle true position within 0.05 mm†',
     cx: 420,
     cy: 350,
     r: 34,
@@ -64,8 +64,8 @@ const CALLOUT_ZONES: CalloutZone[] = [
   {
     id: 'flange',
     code: 'DATUM D',
-    label: '5-Axis Milled',
-    detail: 'Single-fixture bolt circle & bosses',
+    label: 'Wall Thickness',
+    detail: 'Ultrasonic verified minimum wall section 6.2 mm†',
     cx: 675,
     cy: 330,
     r: 42,
@@ -81,7 +81,6 @@ export function DrawingInspector() {
   const outerRef = useRef<HTMLElement>(null);
   const pinWrapRef = useRef<HTMLDivElement>(null);
   const viewportFrameRef = useRef<HTMLDivElement>(null);
-  const scanBeamRef = useRef<HTMLDivElement>(null);
   const [activeId, setActiveId] = useState<string>('bore');
 
   const activeZone = CALLOUT_ZONES.find((z) => z.id === activeId) ?? CALLOUT_ZONES[1];
@@ -140,17 +139,7 @@ export function DrawingInspector() {
                 0
               );
 
-              // 2. Molten laser scan beam sweeps down the part
-              if (scanBeamRef.current) {
-                tl.fromTo(
-                  scanBeamRef.current,
-                  { yPercent: 0, opacity: 0.95 },
-                  { yPercent: 5600, opacity: 0.2, duration: 0.85, ease: 'none' },
-                  0.05
-                );
-              }
-
-              // 3. Draw orthographic SVG dimension arrows & concentric bore rings
+              // 2. Draw orthographic SVG dimension arrows & concentric bore rings
               tl.to(
                 strokePaths,
                 {
@@ -230,13 +219,6 @@ export function DrawingInspector() {
 
           {/* Base Macro Photo (zooms smoothly to active datum target) + Interactive SVG Overlay */}
           <div className="relative aspect-[16/9] max-h-[54svh] w-full overflow-hidden bg-graphite-deep">
-            {/* Molten Laser Scan Beam */}
-            <div
-              ref={scanBeamRef}
-              aria-hidden="true"
-              className="pointer-events-none absolute inset-x-0 top-0 z-20 h-2.5 bg-gradient-to-r from-transparent via-molten to-transparent opacity-0 shadow-[0_0_24px_#FF5A1F]"
-            />
-
             {/* Zoomable Macro Photograph */}
             <div
               className="absolute inset-0 transition-transform duration-700 ease-out will-change-transform"
@@ -246,11 +228,11 @@ export function DrawingInspector() {
               }}
             >
               <Image
-                src="/images/products/ss316-valve-body-2.webp"
+                src="/images/hero/valve-body-cad-base.webp"
                 alt="Machined 316 stainless steel valve body overlaid with orthographic CAD dimension callouts"
                 fill
                 sizes="(max-width: 1280px) 100vw, 1200px"
-                className="object-cover opacity-55 contrast-115"
+                className="object-cover opacity-65 contrast-115"
               />
             </div>
 

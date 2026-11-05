@@ -24,11 +24,11 @@ interface WeaveCard {
 const WEAVE_FAN_CARDS: WeaveCard[] = [
   {
     id: 'percale',
-    code: 'WEAVE 01',
-    name_en: 'Combed Cotton Percale',
-    name_de: 'Gekämmter Baumwoll-Perkal',
-    spec_en: 'Crisp 1-over-1 matte plain weave',
-    spec_de: 'Kühle 1/1-Leinwandbindung, matt gewaschen',
+    code: '01',
+    name_en: 'Cotton Percale',
+    name_de: 'Perkal-Baumwolle',
+    spec_en: '1-over-1 matte plain weave',
+    spec_de: '1:1 mattes Leinwandgewebe',
     macro_url: '/images/weaves/macro-percale.webp',
     rotateDeg: -9,
     shiftX: -18,
@@ -36,11 +36,11 @@ const WEAVE_FAN_CARDS: WeaveCard[] = [
   },
   {
     id: 'linen',
-    code: 'WEAVE 02',
-    name_en: 'Wet-Spun European Flax',
-    name_de: 'Nassgesponnenes Reinleinen',
-    spec_en: 'Natural slub yarn with enzyme tumble',
-    spec_de: 'Natürliches Flammgarn, enzymgewaschen',
+    code: '02',
+    name_en: 'European Flax',
+    name_de: 'Europäisches Leinen',
+    spec_en: 'Slub yarn with enzyme tumble',
+    spec_de: 'Flachsgarn enzymgewaschen',
     macro_url: '/images/weaves/macro-linen.webp',
     rotateDeg: -3,
     shiftX: -6,
@@ -48,11 +48,11 @@ const WEAVE_FAN_CARDS: WeaveCard[] = [
   },
   {
     id: 'waffle',
-    code: 'WEAVE 03',
-    name_en: 'Honeycomb Waffle Piqué',
-    name_de: 'Dreidimensionales Waffelpiqué',
-    spec_en: 'Deep cellular pocket weave for bath & spa',
-    spec_de: 'Tiefes Wabenrelief für Bad & Spa',
+    code: '03',
+    name_en: 'Waffle Piqué',
+    name_de: 'Waffelpikée',
+    spec_en: 'Cellular pocket weave',
+    spec_de: 'Waffel-Strukturgewebe',
     macro_url: '/images/weaves/macro-waffle.webp',
     rotateDeg: 3,
     shiftX: 6,
@@ -60,11 +60,11 @@ const WEAVE_FAN_CARDS: WeaveCard[] = [
   },
   {
     id: 'boucle',
-    code: 'WEAVE 04',
-    name_en: 'Multi-Ply Slub Bouclé',
-    name_de: 'Mehrstufiges Bouclé-Strukturgewebe',
-    spec_en: 'Looped rapier weave for throws & cushions',
-    spec_de: 'Schlingengewebe für Plaids & Kissen',
+    code: '04',
+    name_en: 'Slub Bouclé',
+    name_de: 'Bouclé-Gewebe',
+    spec_en: 'Looped rapier weave',
+    spec_de: 'Schlingengewebe',
     macro_url: '/images/weaves/macro-boucle.webp',
     rotateDeg: 9,
     shiftX: 18,
@@ -185,19 +185,19 @@ export function Act3WeaveWorkbench({ lang }: { lang: Locale }) {
       id="weave-workbench"
       ref={outerRef}
       aria-labelledby="weave-workbench-heading"
-      className="ink-weave-surface relative border-b border-stone/35 bg-ink text-linen lg:pl-16"
+      className="ink-weave-surface relative border-b border-stone/35 bg-ink text-linen"
     >
       <div
         ref={pinWrapRef}
-        className="mx-auto flex min-h-screen max-w-7xl flex-col justify-center px-4 py-14 sm:px-6 lg:py-16 lg:px-8"
+        className="mx-auto flex min-h-screen max-w-7xl flex-col justify-center px-4 py-16 sm:px-6 lg:py-20 lg:px-8"
       >
         {/* Header */}
-        <div className="mb-8 grid grid-cols-1 items-end gap-6 lg:grid-cols-12">
+        <div className="mb-10 grid grid-cols-1 items-end gap-6 lg:grid-cols-12">
           <div className="lg:col-span-7">
             <p className="text-xs font-semibold uppercase tracking-[0.22em] text-stone">
               {lang === 'de'
-                ? 'AKT III · FARBKARTEN-FÄCHER & 4× GEWEBELUPE'
-                : 'ACT III · FANNING SWATCH HANGER & 4× WEAVE LOUPE'}
+                ? 'FARBKARTEN & 4× GEWEBELUPE'
+                : 'VAT-DYED SHADES & 4× LOUPE'}
             </p>
             <h2
               id="weave-workbench-heading"
@@ -206,22 +206,21 @@ export function Act3WeaveWorkbench({ lang }: { lang: Locale }) {
               {lang === 'de' ? (
                 <>
                   Sechs Küpenfarben.{' '}
-                  <span className="italic text-stone">Vier Webbindungen unter der Lupe.</span>
+                  <span className="italic text-stone">Vier Bindungen.</span>
                 </>
               ) : (
                 <>
                   Six vat-dyed shades.{' '}
-                  <span className="italic text-stone">Four weaves under the loupe.</span>
+                  <span className="italic text-stone">Four weaves.</span>
                 </>
               )}
             </h2>
           </div>
           <div className="lg:col-span-5">
-            {/* Max ~40 words body text + 1 sample figure (300 sets†) */}
             <p className="text-sm leading-relaxed text-stone sm:text-base">
               {lang === 'de'
-                ? 'Wählen Sie eine Gewebekarte aus dem Fächer und testen Sie unsere küpengefärbten Farbtöne ab 300 Sets† pro Farbe.'
-                : 'Select a fabric card from the fanning hanger and test our seasonal vat-dyed colourways from 300 sets† per shade.'}
+                ? 'Küpengefärbte Töne ab 300 Sets† pro Farbe.'
+                : 'Seasonal vat-dyed shades from 300 sets† per colourway.'}
             </p>
           </div>
         </div>
@@ -239,7 +238,7 @@ export function Act3WeaveWorkbench({ lang }: { lang: Locale }) {
                     style={{ backgroundColor: activeColour.hex }}
                   />
                   <span className="text-xs font-semibold uppercase tracking-[0.18em] text-stone">
-                    {lang === 'de' ? 'GEWEBE-FÄCHER KARUR' : 'KARUR MILL SWATCH HANGER'}
+                    {lang === 'de' ? 'GEWEBE-FÄCHER' : 'SWATCH HANGER'}
                   </span>
                 </div>
                 <span className="text-[11px] text-stone">
@@ -346,10 +345,6 @@ export function Act3WeaveWorkbench({ lang }: { lang: Locale }) {
                   fill
                   sizes="180px"
                   className="scale-150 object-cover"
-                />
-                <div
-                  className="absolute inset-0 mix-blend-multiply opacity-60 transition-colors duration-300"
-                  style={{ backgroundColor: activeColour.hex }}
                 />
                 {/* Crosshair inside the 4x Loupe */}
                 <div className="absolute inset-0 flex items-center justify-center">

@@ -69,11 +69,11 @@ export function Act5SwatchDesk({
     <section
       id="quote"
       aria-labelledby="quote-desk-heading"
-      className="relative bg-linen py-16 text-ink sm:py-24 lg:pl-16"
+      className="relative bg-linen py-20 text-ink sm:py-28"
     >
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 gap-10 lg:grid-cols-12">
-          {/* Left 5-Col: Bound Physical Swatch Book Card (where the Continuous Indigo Warp Thread ties off) */}
+        <div className="grid grid-cols-1 gap-12 lg:grid-cols-12">
+          {/* Left 5-Col: Bound Physical Swatch Book Card */}
           <div className="lg:col-span-5">
             <div
               className="relative rounded-sm border border-stone/70 bg-alabaster p-6 shadow-md sm:p-8"
@@ -86,12 +86,12 @@ export function Act5SwatchDesk({
               <div className="flex items-center justify-between border-b border-stone/45 pb-3">
                 <span className="text-[11px] font-bold uppercase tracking-[0.2em] text-indigo">
                   {lang === 'de'
-                    ? 'AKT V · IHR PERSÖNLICHES MUSTERBUCH'
-                    : 'ACT V · YOUR BOUND SWATCH BOOK'}
+                    ? 'MUSTERBUCH'
+                    : 'SWATCH BOOK'}
                 </span>
                 <span className="rounded-full bg-indigo-soft px-2.5 py-0.5 text-xs font-semibold text-indigo">
                   {swatches.length}{' '}
-                  {lang === 'de' ? 'Handmuster' : 'Cuttings Pinned'}
+                  {lang === 'de' ? 'Muster' : 'Cuttings'}
                 </span>
               </div>
 
@@ -101,20 +101,19 @@ export function Act5SwatchDesk({
               >
                 {lang === 'de' ? (
                   <>
-                    Musterbuch &amp; <span className="italic text-indigo">Container-Angebot</span> anfordern.
+                    Musterbuch &amp; <span className="italic text-indigo">Angebot</span>.
                   </>
                 ) : (
                   <>
-                    Request your <span className="italic text-indigo">swatch book</span> &amp; export quote.
+                    Request <span className="italic text-indigo">swatches</span> &amp; quote.
                   </>
                 )}
               </h2>
 
-              {/* Max ~40 words body text + 1 sample figure (24 hours†) */}
               <p className="mt-3 text-sm leading-relaxed text-stone-dark">
                 {lang === 'de'
-                  ? 'Wir antworten innerhalb von 24 Stunden† mit FOB/CIF-Staffelpreisen, Mindestmengen pro Farbe und versenden Ihr gebundenes Handmusterbuch per Kurier.'
-                  : 'We reply within 24 hours† with FOB/CIF pricing, MOQ per colourway, and dispatch your bound fabric swatch book via air courier.'}
+                  ? 'Antwort binnen 24 Std.† mit Preisen und Musterversand.'
+                  : 'FOB/CIF pricing and courier dispatch within 24 hours†.'}
               </p>
 
               {/* Pinned Swatches List */}
@@ -171,11 +170,11 @@ export function Act5SwatchDesk({
                 >
                   {requestSwatchBook
                     ? lang === 'de'
-                      ? '✓ Physisches Musterbuch im Antrag enthalten'
-                      : '✓ Physical Swatch Book Included in Request'
+                      ? '✓ Musterbuch inklusive'
+                      : '✓ Swatch Book Included'
                     : lang === 'de'
-                      ? '+ Physisches Musterbuch mitanfordern'
-                      : '+ Request a Sample Swatch Book'}
+                      ? '+ Musterbuch anfordern'
+                      : '+ Request Swatch Book'}
                 </button>
               </div>
             </div>
@@ -226,7 +225,7 @@ export function Act5SwatchDesk({
                         htmlFor="rfq-name"
                         className="block text-xs font-semibold uppercase tracking-wider text-ink"
                       >
-                        {lang === 'de' ? '1. Ihr Name *' : '1. Your Name *'}
+                        {lang === 'de' ? 'Name *' : 'Name *'}
                       </label>
                       <input
                         id="rfq-name"
@@ -247,15 +246,15 @@ export function Act5SwatchDesk({
                         className="block text-xs font-semibold uppercase tracking-wider text-ink"
                       >
                         {lang === 'de'
-                          ? '2. Geschäftliche E-Mail *'
-                          : '2. Business Email *'}
+                          ? 'E-Mail *'
+                          : 'Email *'}
                       </label>
                       <input
                         id="rfq-email"
                         name="email"
                         type="email"
                         required
-                        placeholder="buying@home-retail.de"
+                        placeholder="buying@retail.com"
                         className="mt-1.5 w-full rounded-xs border border-stone/80 bg-linen px-3.5 py-2.5 text-sm text-ink placeholder:text-stone-dark/60 focus:border-indigo"
                       />
                     </div>
@@ -268,8 +267,8 @@ export function Act5SwatchDesk({
                       className="block text-xs font-semibold uppercase tracking-wider text-ink"
                     >
                       {lang === 'de'
-                        ? '3. Land & Zielhafen *'
-                        : '3. Destination Country *'}
+                        ? 'Zielhafen *'
+                        : 'Destination Port *'}
                     </label>
                     <input
                       id="rfq-country"
@@ -293,8 +292,8 @@ export function Act5SwatchDesk({
                       className="block text-xs font-semibold uppercase tracking-wider text-ink"
                     >
                       {lang === 'de'
-                        ? '4. Produkt, Farben & Menge *'
-                        : '4. Product, Colourways & Quantity *'}
+                        ? 'Artikel & Menge *'
+                        : 'Products & Volume *'}
                     </label>
                     <input
                       id="rfq-product-qty"
@@ -312,15 +311,15 @@ export function Act5SwatchDesk({
                     />
                   </div>
 
-                  {/* Field 5: Optional Message / Swatch Book Note */}
+                  {/* Field 5: Optional Message */}
                   <div>
                     <label
                       htmlFor="rfq-message"
                       className="block text-xs font-semibold uppercase tracking-wider text-ink"
                     >
                       {lang === 'de'
-                        ? '5. Nachricht / Musterbuch-Adresse (optional)'
-                        : '5. Message / Swatch Book Delivery Note (optional)'}
+                        ? 'Nachricht (optional)'
+                        : 'Message (optional)'}
                     </label>
                     <textarea
                       id="rfq-message"

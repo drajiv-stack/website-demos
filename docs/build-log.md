@@ -14,5 +14,7 @@
 | textiles | plan | 2026-11-03 16:13 | 2026-11-04 20:03 | 0.4 | 5-Act Interactive Showroom & Live Swatch-Book Assembler plan approved for "NoolWeave Exports" |
 | textiles | build | 2026-11-04 20:03 | 2026-11-05 00:25 | 0.8 | Next.js 16 SSG (38/38 static routes), 5-Act Showroom, continuous indigo thread, 28 WebP assets + 4 videos encoded |
 | textiles | review + fixes | 2026-11-05 00:25 | 2026-11-05 01:10 | 0.7 | 2 review passes: Perf 97, A11y 96+, BP 96+, CLS 0.00, LCP 1.7s, TBT 80ms, JS 129.4 KB gzip; Vercel deployment live |
+| all-demos | fix-pass plan | 2026-11-05 07:13 | 2026-11-05 07:28 | 0.25 | Plan written for imagery overhaul, cardamom scrub hero, datum inspector rebuild, textiles de-clutter, UX spacing & content diet; approved |
+| all-demos | fix-pass build & reviews | 2026-11-05 07:28 | | | |
 
 Target: under 4-5 hours of your own time per demo for the $150 Basic package to be profitable.

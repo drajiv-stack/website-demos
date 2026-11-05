@@ -43,17 +43,13 @@ export function ProductColourwaySwitcher({
           </div>
         ))}
         {colour && (
-          <div className="absolute bottom-3 right-3 h-24 w-24 overflow-hidden rounded-full border-4 border-alabaster shadow-lg sm:h-28 sm:w-28">
+          <div className="absolute bottom-3 right-3 h-20 w-20 overflow-hidden rounded-full border-2 border-alabaster shadow-lg sm:h-24 sm:w-24">
             <Image
-              src={colour.macro_url}
+              src={colour.image_url}
               alt=""
               fill
-              sizes="112px"
-              className="scale-125 object-cover"
-            />
-            <div
-              className="absolute inset-0 mix-blend-multiply opacity-55"
-              style={{ backgroundColor: colour.hex }}
+              sizes="96px"
+              className="object-cover"
             />
           </div>
         )}

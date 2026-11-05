@@ -2,7 +2,6 @@
 
 import React, { useEffect } from 'react';
 import { ShowroomProvider, useShowroom } from '@/lib/swatch-context';
-import { IndigoWarpThread } from '@/components/IndigoWarpThread';
 import { AtelierHeader } from '@/components/AtelierHeader';
 import { AtelierFooter } from '@/components/AtelierFooter';
 import type { Locale, RegionCode } from '@/lib/products';
@@ -41,7 +40,6 @@ export function ShowroomShell({
       >
         {lang === 'de' ? 'Zum Inhalt springen' : 'Skip to main content'}
       </a>
-      <IndigoWarpThread lang={lang} />
       <AtelierHeader lang={lang} />
       <main id="main-content" className="flex-1">
         {children}

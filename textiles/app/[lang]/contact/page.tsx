@@ -48,7 +48,7 @@ export default async function ContactPage({
       />
       <Act5SwatchDesk lang={lang} />
       {whatsapp && (
-        <section className="border-t border-stone/45 bg-alabaster py-10 lg:pl-16">
+        <section className="border-t border-stone/45 bg-alabaster py-10 ">
           <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
             <p className="font-display text-2xl text-ink">
               {de ? 'Lieber direkt schreiben?' : 'Prefer to message directly?'}

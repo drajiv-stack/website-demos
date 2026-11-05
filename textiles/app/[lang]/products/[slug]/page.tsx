@@ -73,7 +73,7 @@ export default async function ProductPage({
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(productJsonLd) }}
       />
-      <section className="linen-weave-surface border-b border-stone/45 bg-linen py-10 sm:py-16 lg:pl-16">
+      <section className="linen-weave-surface border-b border-stone/45 bg-linen py-10 sm:py-16 ">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <nav aria-label={de ? 'Brotkrumen' : 'Breadcrumb'} className="mb-6 text-xs text-stone-dark">
             <Link href={`/${lang}/collections`} className="hover:text-indigo">

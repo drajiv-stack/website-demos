@@ -51,33 +51,39 @@ export function ExportRouteMap() {
               const tl = gsap.timeline({
                 scrollTrigger: {
                   trigger: sectionRef.current,
-                  start: 'top 65%',
-                  end: 'bottom 45%',
-                  scrub: 0.5,
+                  start: 'top 75%',
+                  end: 'center 40%',
+                  scrub: 0.6,
                 },
               });
 
               paths.forEach((path, idx) => {
                 const len = lengths[idx];
                 const vessel = vessels[idx];
+                const dest = endpoints[idx];
                 const proxy = { progress: 0 };
 
                 tl.to(
                   proxy,
                   {
                     progress: 1,
-                    duration: 1.2,
-                    ease: 'none',
+                    duration: 1.0,
+                    ease: 'power1.out',
                     onUpdate: () => {
                       const p = proxy.progress;
-                      path.style.strokeDashoffset = `${len * (1 - p)}`;
+                      path.style.strokeDashoffset = `${Math.max(0, len * (1 - p))}`;
                       if (vessel) {
-                        const pt = path.getPointAtLength(len * p);
-                        vessel.setAttribute('transform', `translate(${pt.x}, ${pt.y})`);
+                        if (p >= 0.995) {
+                          // Ensure vessel locks precisely to the destination port coordinate
+                          vessel.setAttribute('transform', `translate(${dest.x}, ${dest.y})`);
+                        } else {
+                          const pt = path.getPointAtLength(Math.min(len, len * p));
+                          vessel.setAttribute('transform', `translate(${pt.x}, ${pt.y})`);
+                        }
                       }
                     },
                   },
-                  idx * 0.25
+                  idx * 0.12
                 );
               });
             }, sectionRef);
@@ -205,12 +211,21 @@ export function ExportRouteMap() {
                 <circle r="3.8" fill="#F5EDE0" stroke="#D9911A" strokeWidth="2" />
                 <text
                   x="9"
-                  y="-4"
+                  y="-6"
                   fill="#F5EDE0"
                   fontSize="11.5"
                   fontWeight="600"
                 >
                   Jebel Ali
+                </text>
+                <text
+                  x="9"
+                  y="7"
+                  fill="#D9911A"
+                  fontSize="9.5"
+                  fontWeight="500"
+                >
+                  6–9 days†
                 </text>
               </g>
 
@@ -219,12 +234,21 @@ export function ExportRouteMap() {
                 <circle r="3.8" fill="#F5EDE0" stroke="#D9911A" strokeWidth="2" />
                 <text
                   x="9"
-                  y="-5"
+                  y="-6"
                   fill="#F5EDE0"
                   fontSize="11.5"
                   fontWeight="600"
                 >
                   Felixstowe
+                </text>
+                <text
+                  x="9"
+                  y="7"
+                  fill="#D9911A"
+                  fontSize="9.5"
+                  fontWeight="500"
+                >
+                  22–26 days†
                 </text>
               </g>
 
@@ -232,13 +256,22 @@ export function ExportRouteMap() {
               <g transform={`translate(${MARITIME_PORTS.newark.x}, ${MARITIME_PORTS.newark.y})`}>
                 <circle r="3.8" fill="#F5EDE0" stroke="#D9911A" strokeWidth="2" />
                 <text
-                  x="-54"
+                  x="-58"
                   y="-8"
                   fill="#F5EDE0"
                   fontSize="11.5"
                   fontWeight="600"
                 >
                   Newark
+                </text>
+                <text
+                  x="-62"
+                  y="5"
+                  fill="#D9911A"
+                  fontSize="9.5"
+                  fontWeight="500"
+                >
+                  28–34 days†
                 </text>
               </g>
             </svg>
