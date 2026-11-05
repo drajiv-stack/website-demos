@@ -172,9 +172,12 @@ export function P5TextReveal() {
 
         {/* Paragraph: Word Scrolled Scrub (Correct) vs 200+ Character Blast (Broken) */}
         <div className="mt-8 max-w-3xl">
+          {/* Accessible screen reader announcement so unrevealed opacity words don't cause a11y contrast failure */}
+          <p className="sr-only">{SAMPLE_TEXT}</p>
+
           {isBroken ? (
             /* Broken Mode: individual characters split over 2000px */
-            <p className="font-sans text-xl leading-relaxed text-[#C9BFB5] flex flex-wrap">
+            <p aria-hidden="true" className="font-sans text-xl leading-relaxed text-[#C9BFB5] flex flex-wrap">
               {characters.map((ch, idx) => (
                 <span
                   key={idx}
@@ -190,6 +193,7 @@ export function P5TextReveal() {
             /* Correct Mode: clean words scrubbed from 20% to 100% opacity */
             <p
               ref={paragraphRef}
+              aria-hidden="true"
               className="font-sans text-xl sm:text-2xl leading-relaxed text-[#C9BFB5]"
             >
               {words.map((word, idx) => (

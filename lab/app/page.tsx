@@ -17,7 +17,7 @@ export default function LabPage() {
       <header className="relative border-b border-[#332E29] bg-[#161412] px-6 py-20 sm:px-12 lg:py-28">
         <div className="mx-auto max-w-7xl">
           <div className="inline-flex items-center gap-2 rounded-full border border-[#D9911A]/40 bg-[#D9911A]/10 px-3.5 py-1 text-xs font-mono font-bold uppercase tracking-widest text-[#D9911A]">
-            <span>🔬</span>
+            <span>[LAB]</span>
             <span>SCROLL LAB // BENCHMARK WORKBENCH</span>
           </div>
 
@@ -45,7 +45,7 @@ export default function LabPage() {
               <Link
                 key={p.id}
                 href={`#${p.id}`}
-                className="rounded-xs border border-[#332E29] bg-[#221F1B] px-3 py-1.5 text-[#C9BFB5] hover:border-[#D9911A] hover:text-[#D9911A] transition-colors"
+                className="rounded-xs border border-[#332E29] bg-[#221F1B] px-3 py-1.5 text-[#C9BFB5] hover:border-[#D9911A] hover:text-[#D9911A] focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-[#D9911A] transition-colors"
               >
                 {p.label}
               </Link>
@@ -64,9 +64,9 @@ export default function LabPage() {
       <P7SvgRouteDraw />
 
       {/* Footer */}
-      <footer className="border-t border-[#332E29] bg-[#161412] px-6 py-12 text-center font-mono text-xs text-[#8C827A]">
+      <footer className="border-t border-[#332E29] bg-[#161412] px-6 py-12 text-center font-mono text-xs text-[#A39990]">
         <p>Concept design — internal learning lab. Website by Rajiv Dudeja.</p>
-        <p className="mt-1 text-[11px] text-[#554D45]">
+        <p className="mt-1 text-[11px] text-[#A39990]">
           Telemetry measurements recorded live from browser DOM, requestAnimationFrame delta, and HTMLMediaElement events.
         </p>
       </footer>

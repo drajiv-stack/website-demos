@@ -151,7 +151,7 @@ export function P6ZoomThrough() {
         <div
           ref={cardRef}
           className={`relative aspect-16/9 w-[85vw] max-w-[960px] overflow-hidden rounded-sm border border-[#332E29] bg-[#161412] shadow-2xl transition-transform ${
-            !isBroken ? 'css-scroll-zoom' : 'layout-thrash-active'
+            !isBroken && !simulateReducedMotion ? 'css-scroll-zoom' : isBroken ? 'layout-thrash-active' : ''
           }`}
           style={
             isBroken

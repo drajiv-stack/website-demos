@@ -30,7 +30,7 @@ export function LabHud() {
         <div className="flex items-center justify-between gap-4 border-b border-[#332E29] pb-2.5">
           <div className="flex items-center gap-2">
             <span className="h-2 w-2 rounded-full bg-[#D9911A] animate-pulse" />
-            <span className="font-bold tracking-wider text-[#D9911A]">LAB HUD</span>
+            <span className="font-bold tracking-wider text-[#D9911A]">[LAB HUD]</span>
           </div>
 
           <div className="flex items-center gap-3">
@@ -52,21 +52,23 @@ export function LabHud() {
         {!collapsed && (
           <div className="mt-3 space-y-3">
             {/* Active Section Telemetry */}
-            <div className="flex items-center justify-between gap-4 text-[11px] text-[#8C827A]">
-              <span>ACTIVE: <strong className="text-[#F5EDE0] uppercase">{activeSectionId}</strong></span>
-              <span>PROGRESS: <strong className="text-[#D9911A]">{(activeSectionProgress * 100).toFixed(0)}%</strong></span>
+            <div className="grid grid-cols-2 gap-2 text-[11px] text-[#A39990] border-b border-[#332E29]/80 pb-2.5">
+              <div>SECTION: <strong className="text-[#F5EDE0] uppercase">{activeSectionId}</strong></div>
+              <div>PROGRESS: <strong className="text-[#D9911A]">{(activeSectionProgress * 100).toFixed(0)}%</strong></div>
+              <div>ENGINE: <strong className="text-[#F5EDE0]">GSAP / CSS</strong></div>
+              <div>MOTION: <strong className={simulateReducedMotion ? 'text-[#D9911A]' : 'text-emerald-400'}>{simulateReducedMotion ? 'REDUCED' : 'STANDARD'}</strong></div>
             </div>
 
             {/* Diagnostic Toggles */}
-            <div className="space-y-1.5 border-t border-[#332E29]/80 pt-2.5 text-[11px]">
+            <div className="space-y-1.5 pt-1 text-[11px]">
               {/* Toggle 1: Global Break It */}
               <label className="flex cursor-pointer items-center justify-between gap-3 text-red-300 hover:text-red-200">
-                <span className="font-bold">⚠️ BREAK IT (GLOBAL)</span>
+                <span className="font-bold">[BREAK IT] GLOBAL</span>
                 <input
                   type="checkbox"
                   checked={globalBreakIt}
                   onChange={(e) => setGlobalBreakIt(e.target.checked)}
-                  className="accent-red-600 cursor-pointer"
+                  className="h-4 w-4 accent-red-600 cursor-pointer focus-visible:ring-2 focus-visible:ring-red-500"
                 />
               </label>
 
@@ -77,7 +79,7 @@ export function LabHud() {
                   type="checkbox"
                   checked={showMarkers}
                   onChange={(e) => setShowMarkers(e.target.checked)}
-                  className="accent-[#D9911A] cursor-pointer"
+                  className="h-4 w-4 accent-[#D9911A] cursor-pointer focus-visible:ring-2 focus-visible:ring-[#D9911A]"
                 />
               </label>
 
@@ -88,7 +90,7 @@ export function LabHud() {
                   type="checkbox"
                   checked={enableLenis}
                   onChange={(e) => setEnableLenis(e.target.checked)}
-                  className="accent-[#D9911A] cursor-pointer"
+                  className="h-4 w-4 accent-[#D9911A] cursor-pointer focus-visible:ring-2 focus-visible:ring-[#D9911A]"
                 />
               </label>
 
@@ -99,7 +101,7 @@ export function LabHud() {
                   type="checkbox"
                   checked={simulateReducedMotion}
                   onChange={(e) => setSimulateReducedMotion(e.target.checked)}
-                  className="accent-[#D9911A] cursor-pointer"
+                  className="h-4 w-4 accent-[#D9911A] cursor-pointer focus-visible:ring-2 focus-visible:ring-[#D9911A]"
                 />
               </label>
             </div>

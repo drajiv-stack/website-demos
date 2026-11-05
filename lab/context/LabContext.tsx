@@ -37,6 +37,19 @@ export function LabProvider({ children }: { children: React.ReactNode }) {
   const [simulateReducedMotion, setSimulateReducedMotion] = useState(false);
   const [globalBreakIt, setGlobalBreakIt] = useState(false);
 
+  // Sync initial system reduced motion preference
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
+      if (mq.matches) {
+        setSimulateReducedMotion(true);
+      }
+      const handler = (e: MediaQueryListEvent) => setSimulateReducedMotion(e.matches);
+      mq.addEventListener('change', handler);
+      return () => mq.removeEventListener('change', handler);
+    }
+  }, []);
+
   const [fps, setFps] = useState(60);
   const [pageScrollPercent, setPageScrollPercent] = useState(0);
   const [activeSectionId, setActiveSectionId] = useState('p1');
@@ -68,12 +81,13 @@ export function LabProvider({ children }: { children: React.ReactNode }) {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Optional Lenis Integration
+  // Optional Lenis Integration (Desktop only, never on touch/reduced motion)
   useEffect(() => {
-    if (!enableLenis || simulateReducedMotion) return;
+    if (!enableLenis || simulateReducedMotion || window.innerWidth < 768) return;
 
     let isMounted = true;
     let lenisInstance: any = null;
+    let tickerCb: ((time: number) => void) | null = null;
 
     Promise.all([import('lenis'), import('gsap'), import('gsap/ScrollTrigger')]).then(
       ([{ default: Lenis }, { gsap }, { ScrollTrigger }]) => {
@@ -88,15 +102,20 @@ export function LabProvider({ children }: { children: React.ReactNode }) {
 
         lenisInstance.on('scroll', ScrollTrigger.update);
 
-        gsap.ticker.add((time: number) => {
+        tickerCb = (time: number) => {
           lenisInstance.raf(time * 1000);
-        });
+        };
+
+        gsap.ticker.add(tickerCb);
         gsap.ticker.lagSmoothing(0);
       }
     );
 
     return () => {
       isMounted = false;
+      if (tickerCb) {
+        import('gsap').then(({ gsap }) => gsap.ticker.remove(tickerCb!));
+      }
       if (lenisInstance) {
         lenisInstance.destroy();
       }
