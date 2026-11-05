@@ -18,3 +18,4 @@
 | all-demos | fix-pass build & reviews | 2026-11-05 07:28 | | | |
 
 Target: under 4-5 hours of your own time per demo for the $150 Basic package to be profitable.
+| lab | Prompt B (Build Scroll Lab) | 2026-11-05 09:18 | 2026-11-05 09:18 | 0.5h | Complete build of 7 dual-mode patterns + Lab HUD |
