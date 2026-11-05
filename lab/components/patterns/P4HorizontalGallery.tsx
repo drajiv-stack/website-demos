@@ -71,8 +71,7 @@ export function P4HorizontalGallery() {
           const mm = gsap.matchMedia();
 
           if (isBroken) {
-            // BROKEN: Fixed hardcoded pixel value (e.g. -2400px) + pin on mobile
-            // Breaks responsive resizing and traps mobile touch scrolling
+            // BROKEN: Fixed hardcoded pixel value (-2400px) that breaks on resize + pins on mobile
             const hardcodedDistance = -2400;
             setEndDistancePx(hardcodedDistance);
 
@@ -86,8 +85,9 @@ export function P4HorizontalGallery() {
                 end: '+=2500',
                 scrub: 0.5,
                 markers: showMarkers,
+                onEnter: () => setActiveSectionId('P4: Horizontal Gallery'),
+                onEnterBack: () => setActiveSectionId('P4: Horizontal Gallery'),
                 onUpdate: (self) => {
-                  setActiveSectionId('P4: Horizontal Gallery');
                   setActiveSectionProgress(self.progress);
                   const idx = Math.min(CULTIVARS.length, Math.floor(self.progress * CULTIVARS.length) + 1);
                   setActivePanelIndex(idx);
@@ -98,7 +98,7 @@ export function P4HorizontalGallery() {
             // CORRECT: Desktop matchMedia with function-based dynamic end value + invalidateOnRefresh
             // Mobile uses native CSS swipe with scroll snap, no pinning!
             mm.add('(min-width: 768px)', () => {
-              const calculateDistance = () => -(track.scrollWidth - window.innerWidth + 96);
+              const calculateDistance = () => -(track.scrollWidth - container.clientWidth);
               setEndDistancePx(calculateDistance());
 
               gsap.to(track, {
@@ -108,12 +108,13 @@ export function P4HorizontalGallery() {
                   trigger: container,
                   pin: true,
                   start: 'top top',
-                  end: () => `+=${track.scrollWidth - window.innerWidth + 96}`,
+                  end: () => `+=${track.scrollWidth - container.clientWidth}`,
                   scrub: 0.5,
                   markers: showMarkers,
                   invalidateOnRefresh: true,
+                  onEnter: () => setActiveSectionId('P4: Horizontal Gallery'),
+                  onEnterBack: () => setActiveSectionId('P4: Horizontal Gallery'),
                   onUpdate: (self) => {
-                    setActiveSectionId('P4: Horizontal Gallery');
                     setActiveSectionProgress(self.progress);
                     const idx = Math.min(CULTIVARS.length, Math.floor(self.progress * CULTIVARS.length) + 1);
                     setActivePanelIndex(idx);
@@ -129,8 +130,9 @@ export function P4HorizontalGallery() {
                 trigger: container,
                 start: 'top center',
                 end: 'bottom center',
+                onEnter: () => setActiveSectionId('P4: Horizontal Gallery'),
+                onEnterBack: () => setActiveSectionId('P4: Horizontal Gallery'),
                 onUpdate: (self) => {
-                  setActiveSectionId('P4: Horizontal Gallery');
                   setActiveSectionProgress(self.progress);
                 },
               });
@@ -167,37 +169,36 @@ export function P4HorizontalGallery() {
     >
       <div
         ref={containerRef}
-        className={`relative w-full bg-[#1A1714] ${
-          isBroken ? 'h-[300vh]' : 'md:h-[300vh] h-auto'
-        }`}
+        className="relative w-full bg-[#1A1714] py-8 overflow-hidden rounded-sm border border-[#332E29]"
       >
-        <div className="sticky top-0 flex h-[100svh] w-full items-center overflow-hidden">
-          {/* Active Mode Banner */}
-          <div className="absolute top-4 left-4 z-20 flex items-center gap-2 rounded-xs border border-[#332E29] bg-[#161412]/90 px-3 py-1.5 font-mono text-xs">
-            <span className={`h-2 w-2 rounded-full ${isBroken ? 'bg-red-500' : 'bg-[#D9911A]'}`} />
-            <span className="font-semibold text-[#F5EDE0]">
-              {isBroken ? config.brokenBadge : config.correctBadge}
-            </span>
-          </div>
+        {/* Active Mode Banner */}
+        <div className="mb-6 ml-6 inline-flex items-center gap-2 rounded-xs border border-[#332E29] bg-[#161412]/90 px-3 py-1.5 font-mono text-xs backdrop-blur-xs">
+          <span className={`h-2 w-2 rounded-full ${isBroken ? 'bg-red-500' : 'bg-[#D9911A]'}`} />
+          <span className="font-semibold text-[#F5EDE0]">
+            {isBroken ? config.brokenBadge : config.correctBadge}
+          </span>
+        </div>
 
-          {/* Cards Track Container */}
-          <div
-            ref={trackRef}
-            className={`flex items-center gap-8 px-6 sm:px-12 ${
-              !isBroken ? 'max-md:overflow-x-auto max-md:snap-x max-md:snap-mandatory max-md:py-8' : ''
-            }`}
-          >
-            {CULTIVARS.map((item, idx) => (
-              <div
-                key={item.code}
-                className="w-[85vw] max-w-[420px] shrink-0 snap-center rounded-sm border border-[#332E29] bg-[#221F1B] p-6 shadow-xl"
-              >
+        {/* Cards Track Container */}
+        <div
+          ref={trackRef}
+          className={`flex items-stretch gap-6 px-6 ${
+            !isBroken ? 'max-md:overflow-x-auto max-md:snap-x max-md:snap-mandatory max-md:pb-6' : ''
+          }`}
+          style={{ willChange: 'transform' }}
+        >
+          {CULTIVARS.map((item) => (
+            <div
+              key={item.code}
+              className="w-[85vw] sm:w-[380px] shrink-0 snap-center rounded-sm border border-[#332E29] bg-[#221F1B] p-6 shadow-xl flex flex-col justify-between"
+            >
+              <div>
                 <div className="relative aspect-16/10 w-full overflow-hidden rounded-xs border border-[#332E29]">
                   <Image
                     src={item.image}
                     alt={item.name}
                     fill
-                    sizes="420px"
+                    sizes="380px"
                     className="object-cover"
                   />
                   <div className="absolute top-2 right-2 rounded-xs bg-[#161412]/90 px-2.5 py-1 font-mono text-[11px] font-bold text-[#D9911A]">
@@ -220,8 +221,13 @@ export function P4HorizontalGallery() {
                   </p>
                 </div>
               </div>
-            ))}
-          </div>
+
+              <div className="mt-6 pt-4 border-t border-[#332E29]/60 flex items-center justify-between font-mono text-[11px] text-[#8C827A]">
+                <span>Sample Specification</span>
+                <span className="text-[#D9911A]">EXPORT READY</span>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     </PatternWrapper>

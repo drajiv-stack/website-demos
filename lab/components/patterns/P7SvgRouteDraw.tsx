@@ -19,23 +19,29 @@ export function P7SvgRouteDraw() {
   // Readouts state
   const [engineInUse, setEngineInUse] = useState<string>('Static Precomputed');
   const [drawPercent, setDrawPercent] = useState<number>(0);
-  const [calcPerSec, setCalcPerSec] = useState<number>(0);
+  const [calcCount, setCalcCount] = useState<number>(0);
 
   useEffect(() => {
     const container = containerRef.current;
     const path = pathRef.current;
     if (!container || !path) return;
 
-    const totalLength = path.getTotalLength();
+    let totalLength = 800;
+    try {
+      totalLength = path.getTotalLength() || 800;
+    } catch {
+      totalLength = 800;
+    }
+
     path.style.strokeDasharray = `${totalLength}`;
     path.style.strokeDashoffset = `${totalLength}`;
 
     if (isBroken) {
-      setEngineInUse('Continuous Path Recalculation (JS)');
-      setCalcPerSec(0);
+      setEngineInUse('JS Uncached getTotalLength()');
+      setCalcCount(0);
     } else {
-      setEngineInUse('Precomputed stroke-dashoffset (GSAP / CSS)');
-      setCalcPerSec(0);
+      setEngineInUse('Precomputed stroke-dashoffset (GSAP)');
+      setCalcCount(0);
     }
 
     let isMounted = true;
@@ -54,21 +60,22 @@ export function P7SvgRouteDraw() {
               start: 'top 70%',
               end: 'bottom 20%',
               markers: showMarkers,
+              onEnter: () => setActiveSectionId('P7: SVG Route Draw'),
+              onEnterBack: () => setActiveSectionId('P7: SVG Route Draw'),
               onUpdate: (self) => {
                 const p = self.progress;
-                setActiveSectionId('P7: SVG Route Draw');
                 setActiveSectionProgress(p);
                 setDrawPercent(Math.round(p * 100));
 
-                // Anti-pattern: continuous synchronous SVG path calculations
+                // Anti-pattern: synchronous heavy SVG DOM path calculations
                 const dynamicLen = path.getTotalLength();
                 path.setAttribute('stroke-dasharray', `${dynamicLen}`);
                 path.setAttribute('stroke-dashoffset', `${dynamicLen * (1 - p)}`);
-                setCalcPerSec((prev) => prev + 1);
+                setCalcCount((prev) => prev + 1);
               },
             });
           } else {
-            // CORRECT: Precalculated static vector offset scrub
+            // CORRECT: Precalculated static path stroke-dashoffset with GSAP scrub
             gsap.fromTo(
               path,
               { strokeDashoffset: totalLength },
@@ -79,11 +86,12 @@ export function P7SvgRouteDraw() {
                   trigger: container,
                   start: 'top 70%',
                   end: 'bottom 20%',
-                  scrub: 0.4,
+                  scrub: 0.5,
                   markers: showMarkers,
+                  onEnter: () => setActiveSectionId('P7: SVG Route Draw'),
+                  onEnterBack: () => setActiveSectionId('P7: SVG Route Draw'),
                   onUpdate: (self) => {
                     const p = self.progress;
-                    setActiveSectionId('P7: SVG Route Draw');
                     setActiveSectionProgress(p);
                     setDrawPercent(Math.round(p * 100));
                   },
@@ -107,19 +115,19 @@ export function P7SvgRouteDraw() {
       readouts={
         <>
           <ReadoutBadge
-            label="Draw Progress"
-            value={`${drawPercent}%`}
-            variant="turmeric"
-          />
-          <ReadoutBadge
             label="Engine"
             value={engineInUse}
-            variant={isBroken ? 'red' : 'stone'}
+            variant={isBroken ? 'red' : 'turmeric'}
+          />
+          <ReadoutBadge
+            label="Drawn"
+            value={`${drawPercent}%`}
+            variant="stone"
           />
           {isBroken && (
             <ReadoutBadge
-              label="DOM Attribute Calls"
-              value={calcPerSec}
+              label="Recalculations"
+              value={calcCount}
               variant="red"
             />
           )}
@@ -128,10 +136,10 @@ export function P7SvgRouteDraw() {
     >
       <div
         ref={containerRef}
-        className="relative flex min-h-[90vh] w-full items-center justify-center overflow-hidden bg-[#1A1714] p-8 sm:p-12"
+        className="relative flex min-h-[90vh] w-full flex-col items-center justify-center p-6 sm:p-12 rounded-sm border border-[#332E29] bg-[#161412]"
       >
         {/* Active Mode Banner */}
-        <div className="absolute top-4 left-4 z-20 flex items-center gap-2 rounded-xs border border-[#332E29] bg-[#161412]/90 px-3 py-1.5 font-mono text-xs">
+        <div className="mb-6 inline-flex items-center gap-2 rounded-xs border border-[#332E29] bg-[#161412]/90 px-3 py-1.5 font-mono text-xs backdrop-blur-xs">
           <span className={`h-2 w-2 rounded-full ${isBroken ? 'bg-red-500' : 'bg-[#D9911A]'}`} />
           <span className="font-semibold text-[#F5EDE0]">
             {isBroken ? config.brokenBadge : config.correctBadge}
@@ -139,7 +147,7 @@ export function P7SvgRouteDraw() {
         </div>
 
         {/* Shipping Route SVG Canvas */}
-        <div className="relative aspect-16/10 w-full max-w-4xl rounded-sm border border-[#332E29] bg-[#161412] p-6 shadow-2xl">
+        <div className="relative aspect-16/10 w-full max-w-4xl rounded-sm border border-[#332E29] bg-[#161412] p-4 sm:p-6 shadow-2xl">
           <svg
             viewBox="0 0 1000 550"
             className="h-full w-full pointer-events-none"

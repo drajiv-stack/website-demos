@@ -24,7 +24,6 @@ export function P6ZoomThrough() {
     const card = cardRef.current;
     if (!container || !card) return;
 
-    // Detect browser CSS scroll-driven support
     const supportsCssView = typeof CSS !== 'undefined' && CSS.supports && CSS.supports('animation-timeline', 'view()');
 
     if (isBroken) {
@@ -45,32 +44,34 @@ export function P6ZoomThrough() {
 
         ctx = gsap.context(() => {
           if (isBroken) {
-            // BROKEN: Animate layout geometry directly (width, height, top, left) causing continuous browser reflows
+            // BROKEN: Animate layout geometry directly (width, height) forcing reflows
             ScrollTrigger.create({
               trigger: container,
               start: 'top top',
               end: 'bottom bottom',
               markers: showMarkers,
+              onEnter: () => setActiveSectionId('P6: Zoom-Through'),
+              onEnterBack: () => setActiveSectionId('P6: Zoom-Through'),
               onUpdate: (self) => {
                 const p = self.progress;
-                setActiveSectionId('P6: Zoom-Through');
                 setActiveSectionProgress(p);
 
-                // Force layout reflow by updating width/height/left in pixels
                 const baseWidth = 320;
-                const targetWidth = window.innerWidth * 0.9;
+                const targetWidth = Math.min(container.clientWidth * 0.9, 960);
                 const currentWidth = baseWidth + (targetWidth - baseWidth) * p;
 
                 card.style.width = `${currentWidth}px`;
-                card.style.height = `${currentWidth * 0.56}px`;
+                card.style.height = `${currentWidth * 0.5625}px`;
 
-                // Reading offsetWidth forces synchronous layout recalculation
-                const forcedReflow = card.offsetWidth;
-                setReflowCount((prev) => prev + 1);
+                // Forced synchronous reflow read
+                const forced = card.offsetWidth;
+                if (forced > 0) {
+                  setReflowCount((prev) => prev + 1);
+                }
               },
             });
           } else {
-            // CORRECT: If CSS scroll-driven animation isn't supported, run smooth GSAP transform: scale()
+            // CORRECT: CSS Scroll-Driven or GSAP Transform Fallback
             if (!supportsCssView || simulateReducedMotion) {
               gsap.fromTo(
                 card,
@@ -83,23 +84,25 @@ export function P6ZoomThrough() {
                     trigger: container,
                     start: 'top 80%',
                     end: 'bottom 20%',
-                    scrub: 0.4,
+                    scrub: true,
                     markers: showMarkers,
+                    onEnter: () => setActiveSectionId('P6: Zoom-Through'),
+                    onEnterBack: () => setActiveSectionId('P6: Zoom-Through'),
                     onUpdate: (self) => {
-                      setActiveSectionId('P6: Zoom-Through');
                       setActiveSectionProgress(self.progress);
                     },
                   },
                 }
               );
             } else {
-              // Browser natively drives animation on compositor thread
+              // Section tracker for HUD when pure CSS animation is handling visual zoom
               ScrollTrigger.create({
                 trigger: container,
                 start: 'top 80%',
                 end: 'bottom 20%',
+                onEnter: () => setActiveSectionId('P6: Zoom-Through'),
+                onEnterBack: () => setActiveSectionId('P6: Zoom-Through'),
                 onUpdate: (self) => {
-                  setActiveSectionId('P6: Zoom-Through');
                   setActiveSectionProgress(self.progress);
                 },
               });
@@ -137,10 +140,10 @@ export function P6ZoomThrough() {
     >
       <div
         ref={containerRef}
-        className="relative flex min-h-[140vh] w-full items-center justify-center overflow-hidden bg-[#1A1714] py-20"
+        className="relative flex min-h-[120vh] w-full items-center justify-center overflow-hidden rounded-sm border border-[#332E29] bg-[#161412] py-20"
       >
         {/* Active Mode Banner */}
-        <div className="absolute top-4 left-4 z-20 flex items-center gap-2 rounded-xs border border-[#332E29] bg-[#161412]/90 px-3 py-1.5 font-mono text-xs">
+        <div className="absolute top-4 left-4 z-20 flex items-center gap-2 rounded-xs border border-[#332E29] bg-[#161412]/90 px-3 py-1.5 font-mono text-xs backdrop-blur-xs">
           <span className={`h-2 w-2 rounded-full ${isBroken ? 'bg-red-500' : 'bg-[#D9911A]'}`} />
           <span className="font-semibold text-[#F5EDE0]">
             {isBroken ? config.brokenBadge : config.correctBadge}
@@ -150,7 +153,7 @@ export function P6ZoomThrough() {
         {/* Zoom Card */}
         <div
           ref={cardRef}
-          className={`relative aspect-16/9 w-[85vw] max-w-[960px] overflow-hidden rounded-sm border border-[#332E29] bg-[#161412] shadow-2xl transition-transform ${
+          className={`relative aspect-video w-[85vw] max-w-[960px] overflow-hidden rounded-sm border border-[#332E29] bg-[#161412] shadow-2xl ${
             !isBroken && !simulateReducedMotion ? 'css-scroll-zoom' : isBroken ? 'layout-thrash-active' : ''
           }`}
           style={

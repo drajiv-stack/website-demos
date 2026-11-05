@@ -30,9 +30,9 @@ export function P5TextReveal() {
     if (!container) return;
 
     if (isBroken) {
-      setSplitNodeCount(characters.length); // ~180 individual spans
+      setSplitNodeCount(characters.length);
     } else {
-      setSplitNodeCount(words.length); // ~24 words
+      setSplitNodeCount(words.length);
     }
 
     let isMounted = true;
@@ -46,7 +46,7 @@ export function P5TextReveal() {
         ctx = gsap.context(() => {
           if (isBroken) {
             // BROKEN: Scrubbing 180+ individual character spans across 2,000px
-            const charNodes = gsap.utils.toArray<HTMLElement>('[data-char-node]');
+            const charNodes = gsap.utils.toArray<HTMLElement>('.char-node');
             gsap.fromTo(
               charNodes,
               { opacity: 0.1, rotateX: 90, y: 15 },
@@ -59,11 +59,12 @@ export function P5TextReveal() {
                 scrollTrigger: {
                   trigger: container,
                   start: 'top 70%',
-                  end: '+=2000',
+                  end: 'bottom 30%',
                   scrub: 0.5,
                   markers: showMarkers,
+                  onEnter: () => setActiveSectionId('P5: Text Reveal'),
+                  onEnterBack: () => setActiveSectionId('P5: Text Reveal'),
                   onUpdate: (self) => {
-                    setActiveSectionId('P5: Text Reveal');
                     setActiveSectionProgress(self.progress);
                     setActiveWordsCount(Math.round(self.progress * words.length));
                   },
@@ -76,7 +77,7 @@ export function P5TextReveal() {
             if (headlineMaskRef.current) {
               gsap.fromTo(
                 headlineMaskRef.current.querySelectorAll('.line-inner'),
-                { y: '100%' },
+                { y: '105%' },
                 {
                   y: '0%',
                   duration: 0.8,
@@ -92,13 +93,13 @@ export function P5TextReveal() {
             }
 
             // (b) Paragraph: Words scrubbed from 20% to 100% opacity
-            const wordNodes = gsap.utils.toArray<HTMLElement>('[data-word-node]');
+            const wordNodes = gsap.utils.toArray<HTMLElement>('.word-node');
             gsap.fromTo(
               wordNodes,
               { opacity: 0.2 },
               {
                 opacity: 1,
-                stagger: 0.1,
+                stagger: 0.08,
                 ease: 'none',
                 scrollTrigger: {
                   trigger: container,
@@ -106,8 +107,9 @@ export function P5TextReveal() {
                   end: 'bottom 40%',
                   scrub: 0.4,
                   markers: showMarkers,
+                  onEnter: () => setActiveSectionId('P5: Text Reveal'),
+                  onEnterBack: () => setActiveSectionId('P5: Text Reveal'),
                   onUpdate: (self) => {
-                    setActiveSectionId('P5: Text Reveal');
                     setActiveSectionProgress(self.progress);
                     setActiveWordsCount(Math.round(self.progress * words.length));
                   },
@@ -145,8 +147,8 @@ export function P5TextReveal() {
     >
       <div
         ref={containerRef}
-        className={`relative flex flex-col justify-center px-6 py-24 sm:px-16 ${
-          isBroken ? 'min-h-[2200px]' : 'min-h-[80vh]'
+        className={`relative flex flex-col justify-center px-6 py-20 sm:px-16 rounded-sm border border-[#332E29] bg-[#161412] ${
+          isBroken ? 'min-h-[1600px]' : 'min-h-[70vh]'
         }`}
       >
         {/* Active Mode Banner */}
@@ -160,9 +162,9 @@ export function P5TextReveal() {
         {/* Headline Line-Masked Container */}
         <h3
           ref={headlineMaskRef}
-          className="font-display text-3xl sm:text-5xl font-normal leading-[1.15] text-[#F5EDE0]"
+          className="font-display text-3xl sm:text-5xl font-normal leading-[1.15] text-[#F5EDE0] max-w-4xl"
         >
-          <span className="block overflow-hidden">
+          <span className="block overflow-hidden pb-1">
             <span className="line-inner block">Preserving Botanical Essence</span>
           </span>
           <span className="block overflow-hidden">
@@ -170,19 +172,16 @@ export function P5TextReveal() {
           </span>
         </h3>
 
-        {/* Paragraph: Word Scrolled Scrub (Correct) vs 200+ Character Blast (Broken) */}
+        {/* Paragraph: Word Scrolled Scrub (Correct) vs Character Blast (Broken) */}
         <div className="mt-8 max-w-3xl">
-          {/* Accessible screen reader announcement so unrevealed opacity words don't cause a11y contrast failure */}
           <p className="sr-only">{SAMPLE_TEXT}</p>
 
           {isBroken ? (
-            /* Broken Mode: individual characters split over 2000px */
             <p aria-hidden="true" className="font-sans text-xl leading-relaxed text-[#C9BFB5] flex flex-wrap">
               {characters.map((ch, idx) => (
                 <span
                   key={idx}
-                  data-char-node
-                  className="inline-block transform-gpu"
+                  className="char-node inline-block transform-gpu"
                   style={{ whiteSpace: ch === ' ' ? 'pre' : 'normal' }}
                 >
                   {ch}
@@ -190,7 +189,6 @@ export function P5TextReveal() {
               ))}
             </p>
           ) : (
-            /* Correct Mode: clean words scrubbed from 20% to 100% opacity */
             <p
               ref={paragraphRef}
               aria-hidden="true"
@@ -199,8 +197,7 @@ export function P5TextReveal() {
               {words.map((word, idx) => (
                 <span
                   key={idx}
-                  data-word-node
-                  className="inline-block mr-2 transition-opacity duration-75"
+                  className="word-node inline-block mr-2"
                 >
                   {word}
                 </span>

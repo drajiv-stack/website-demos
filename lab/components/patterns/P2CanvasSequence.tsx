@@ -15,7 +15,7 @@ export function P2CanvasSequence() {
 
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const imagesRef = useRef<HTMLImageElement[]>([]);
+  const imagesRef = useRef<(HTMLImageElement | null)[]>(new Array(TOTAL_FRAMES).fill(null));
 
   // Readouts state
   const [totalKb, setTotalKb] = useState<number>(380);
@@ -36,27 +36,30 @@ export function P2CanvasSequence() {
     let isMounted = true;
     const startTime = performance.now();
 
-    // Reset arrays
-    imagesRef.current = new Array(TOTAL_FRAMES);
+    imagesRef.current = new Array(TOTAL_FRAMES).fill(null);
 
     const drawFrame = (frameIndex: number) => {
       const img = imagesRef.current[frameIndex - 1];
       if (!img || !img.complete || img.naturalWidth === 0) return;
 
       const dpr = window.devicePixelRatio || 1;
-      const displayWidth = canvas.clientWidth;
-      const displayHeight = canvas.clientHeight;
+      const rect = canvas.getBoundingClientRect();
+      const displayWidth = rect.width || canvas.clientWidth || 960;
+      const displayHeight = rect.height || canvas.clientHeight || 540;
 
-      if (canvas.width !== displayWidth * dpr || canvas.height !== displayHeight * dpr) {
-        canvas.width = displayWidth * dpr;
-        canvas.height = displayHeight * dpr;
+      const targetW = Math.round(displayWidth * dpr);
+      const targetH = Math.round(displayHeight * dpr);
+
+      if (canvas.width !== targetW || canvas.height !== targetH) {
+        canvas.width = targetW;
+        canvas.height = targetH;
       }
 
       ctx.save();
       ctx.scale(dpr, dpr);
       ctx.clearRect(0, 0, displayWidth, displayHeight);
 
-      // Center contain draw
+      // Aspect contain
       const imgAspect = img.naturalWidth / img.naturalHeight;
       const canvasAspect = displayWidth / displayHeight;
       let drawW = displayWidth;
@@ -76,70 +79,58 @@ export function P2CanvasSequence() {
       ctx.restore();
     };
 
+    const loadImage = (i: number, onFirst?: () => void) => {
+      if (imagesRef.current[i - 1]) return;
+      const img = new Image();
+      img.src = `/media/frames/f_${String(i).padStart(3, '0')}.webp`;
+      img.onload = () => {
+        if (!isMounted) return;
+        if (i === 1 && onFirst) onFirst();
+        if (currentFrameRef.current === i) {
+          drawFrame(i);
+        }
+      };
+      imagesRef.current[i - 1] = img;
+    };
+
     if (isBroken) {
       // BROKEN: Eager 96-image blast all at once on mount
       setRequestsCount(96);
       setTotalKb(3640);
 
       for (let i = 1; i <= TOTAL_FRAMES; i++) {
-        const img = new Image();
-        img.src = `/media/frames/f_${String(i).padStart(3, '0')}.webp`;
-        imagesRef.current[i - 1] = img;
-        if (i === 1) {
-          img.onload = () => {
-            if (isMounted) {
-              setTimeToFirstFrame(Math.round(performance.now() - startTime));
-              drawFrame(1);
-            }
-          };
-        }
+        loadImage(i, () => {
+          setTimeToFirstFrame(Math.round(performance.now() - startTime));
+          drawFrame(1);
+        });
       }
     } else {
-      // CORRECT: Preload first 10, lazy-load remaining 86 in chunks
+      // CORRECT: Preload first 10, progressive idle chunking for remaining
       setRequestsCount(10);
       setTotalKb(380);
 
-      // 1. Initial 10 frames
       for (let i = 1; i <= 10; i++) {
-        const img = new Image();
-        img.src = `/media/frames/f_${String(i).padStart(3, '0')}.webp`;
-        imagesRef.current[i - 1] = img;
-        if (i === 1) {
-          img.onload = () => {
-            if (isMounted) {
-              setTimeToFirstFrame(Math.round(performance.now() - startTime));
-              drawFrame(1);
-            }
-          };
+        loadImage(i, i === 1 ? () => {
+          setTimeToFirstFrame(Math.round(performance.now() - startTime));
+          drawFrame(1);
+        } : undefined);
+      }
+
+      // Background chunking
+      let loaded = 10;
+      const chunkTimer = setInterval(() => {
+        if (!isMounted || loaded >= TOTAL_FRAMES) {
+          clearInterval(chunkTimer);
+          return;
         }
-      }
-
-      // 2. Progressive background idle chunking for remaining frames
-      const loadRemaining = () => {
-        if (!isMounted) return;
-        let loaded = 10;
-        const chunkInterval = setInterval(() => {
-          if (!isMounted || loaded >= TOTAL_FRAMES) {
-            clearInterval(chunkInterval);
-            return;
-          }
-          const batch = Math.min(TOTAL_FRAMES, loaded + 10);
-          for (let i = loaded + 1; i <= batch; i++) {
-            const img = new Image();
-            img.src = `/media/frames/f_${String(i).padStart(3, '0')}.webp`;
-            imagesRef.current[i - 1] = img;
-          }
-          loaded = batch;
-          setRequestsCount(loaded);
-          setTotalKb(Math.round((loaded / TOTAL_FRAMES) * 3640));
-        }, 120);
-      };
-
-      if ('requestIdleCallback' in window) {
-        (window as any).requestIdleCallback(loadRemaining);
-      } else {
-        setTimeout(loadRemaining, 300);
-      }
+        const batch = Math.min(TOTAL_FRAMES, loaded + 10);
+        for (let i = loaded + 1; i <= batch; i++) {
+          loadImage(i);
+        }
+        loaded = batch;
+        setRequestsCount(loaded);
+        setTotalKb(Math.round((loaded / TOTAL_FRAMES) * 3640));
+      }, 100);
     }
 
     let gsapCtx: { revert: () => void } | undefined;
@@ -155,9 +146,10 @@ export function P2CanvasSequence() {
             start: 'top top',
             end: 'bottom bottom',
             markers: showMarkers,
+            onEnter: () => setActiveSectionId('P2: Canvas Sequence'),
+            onEnterBack: () => setActiveSectionId('P2: Canvas Sequence'),
             onUpdate: (self) => {
               const p = self.progress;
-              setActiveSectionId('P2: Canvas Sequence');
               setActiveSectionProgress(p);
 
               if (simulateReducedMotion) return;
@@ -165,8 +157,13 @@ export function P2CanvasSequence() {
               const targetFrame = Math.min(TOTAL_FRAMES, Math.max(1, Math.round(p * (TOTAL_FRAMES - 1)) + 1));
               currentFrameRef.current = targetFrame;
 
+              // If frame isn't loaded yet in correct mode, trigger urgent load
+              if (!imagesRef.current[targetFrame - 1]) {
+                loadImage(targetFrame);
+              }
+
               if (isBroken) {
-                // BROKEN: Unthrottled draw directly in scroll event
+                // BROKEN: Unthrottled direct synchronous draw on every scroll tick
                 drawFrame(targetFrame);
               } else {
                 // CORRECT: Throttled to requestAnimationFrame
@@ -179,8 +176,14 @@ export function P2CanvasSequence() {
       }
     );
 
+    const handleResize = () => {
+      drawFrame(currentFrameRef.current);
+    };
+    window.addEventListener('resize', handleResize);
+
     return () => {
       isMounted = false;
+      window.removeEventListener('resize', handleResize);
       if (rafIdRef.current) cancelAnimationFrame(rafIdRef.current);
       gsapCtx?.revert();
     };
@@ -212,20 +215,21 @@ export function P2CanvasSequence() {
       }
     >
       <div ref={containerRef} className="relative h-[300vh] w-full bg-[#1A1714]">
-        <div className="sticky top-0 flex h-[100svh] w-full items-center justify-center overflow-hidden">
-          {/* Active Mode Banner */}
-          <div className="absolute top-4 left-4 z-20 flex items-center gap-2 rounded-xs border border-[#332E29] bg-[#161412]/90 px-3 py-1.5 font-mono text-xs">
-            <span className={`h-2 w-2 rounded-full ${isBroken ? 'bg-red-500' : 'bg-[#D9911A]'}`} />
-            <span className="font-semibold text-[#F5EDE0]">
-              {isBroken ? config.brokenBadge : config.correctBadge}
-            </span>
-          </div>
+        <div className="sticky top-0 flex h-[100svh] w-full items-center justify-center p-4 sm:p-6 lg:p-8">
+          <div className="relative aspect-video w-full max-w-5xl overflow-hidden rounded-sm border border-[#332E29] bg-[#161412] shadow-2xl">
+            {/* Active Mode Banner */}
+            <div className="absolute top-4 left-4 z-20 flex items-center gap-2 rounded-xs border border-[#332E29] bg-[#161412]/90 px-3 py-1.5 font-mono text-xs backdrop-blur-xs">
+              <span className={`h-2 w-2 rounded-full ${isBroken ? 'bg-red-500' : 'bg-[#D9911A]'}`} />
+              <span className="font-semibold text-[#F5EDE0]">
+                {isBroken ? config.brokenBadge : config.correctBadge}
+              </span>
+            </div>
 
-          <canvas
-            ref={canvasRef}
-            className="h-full w-full object-contain"
-            style={{ width: '100%', height: '100%' }}
-          />
+            <canvas
+              ref={canvasRef}
+              className="h-full w-full object-contain"
+            />
+          </div>
         </div>
       </div>
     </PatternWrapper>

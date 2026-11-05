@@ -66,8 +66,8 @@ export function PatternWrapper({
           </div>
         </div>
 
-        {/* Live Pattern Canvas / Stage Viewport */}
-        <div className="relative mb-8 overflow-hidden rounded-sm border border-[#332E29] bg-[#161412] shadow-2xl">
+        {/* Live Pattern Stage */}
+        <div className="relative mb-8">
           {children}
         </div>
 

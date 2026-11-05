@@ -60,36 +60,52 @@ export function P3PinnedStory() {
         gsap.registerPlugin(ScrollTrigger);
 
         ctx = gsap.context(() => {
+          const slides = gsap.utils.toArray<HTMLElement>('.story-slide');
+          const texts = gsap.utils.toArray<HTMLElement>('.story-text');
+
           if (isBroken) {
-            // BROKEN: Multiple independent ScrollTriggers attached to child tweens
-            // Nested inside a non-synchronized parent, causing pin collisions and desync
-            const stepCards = gsap.utils.toArray<HTMLElement>('[data-step-card]');
-            stepCards.forEach((card, idx) => {
-              ScrollTrigger.create({
-                trigger: card,
-                start: 'top 60%',
-                end: 'bottom 40%',
-                markers: showMarkers,
-                onEnter: () => setActiveStepIndex(idx + 1),
-                onEnterBack: () => setActiveStepIndex(idx + 1),
+            // BROKEN: Separate ScrollTriggers on nested tweens inside one timeline
+            // Causes stutter, desync between text and image, and pin collisions
+            const tl = gsap.timeline();
+
+            slides.forEach((slide, idx) => {
+              // Anti-pattern: scrollTrigger placed on nested child tween
+              tl.to(slide, {
+                opacity: 1,
+                scrollTrigger: {
+                  trigger: container,
+                  start: `top+=${idx * 400} top`,
+                  end: `top+=${(idx + 1) * 400} top`,
+                  scrub: true,
+                  markers: showMarkers,
+                  onEnter: () => setActiveStepIndex(idx + 1),
+                  onEnterBack: () => setActiveStepIndex(idx + 1),
+                  onUpdate: (self) => {
+                    setTimelineProgress(self.progress);
+                    setActiveSectionProgress(self.progress);
+                  },
+                },
               });
             });
 
-            // Stage pinned independently causing stutter
+            // Independent pin on stage
             ScrollTrigger.create({
               trigger: stage,
               pin: true,
               start: 'top top',
-              end: '+=200%',
+              end: '+=1600',
               markers: showMarkers,
-              onUpdate: (self) => {
-                setTimelineProgress(self.progress);
-                setActiveSectionId('P3: Pinned Story');
-                setActiveSectionProgress(self.progress);
-              },
+              onEnter: () => setActiveSectionId('P3: Pinned Story'),
+              onEnterBack: () => setActiveSectionId('P3: Pinned Story'),
             });
           } else {
-            // CORRECT: Single synchronized GSAP Timeline with one pin
+            // CORRECT: Single master timeline with one ScrollTrigger pin
+            // Initialize initial states
+            gsap.set(slides, { opacity: 0, scale: 1.05 });
+            gsap.set(texts, { opacity: 0, y: 30 });
+            gsap.set(slides[0], { opacity: 1, scale: 1 });
+            gsap.set(texts[0], { opacity: 1, y: 0 });
+
             const tl = gsap.timeline({
               scrollTrigger: {
                 trigger: container,
@@ -99,50 +115,26 @@ export function P3PinnedStory() {
                 scrub: 0.5,
                 markers: showMarkers,
                 invalidateOnRefresh: true,
+                onEnter: () => setActiveSectionId('P3: Pinned Story'),
+                onEnterBack: () => setActiveSectionId('P3: Pinned Story'),
                 onUpdate: (self) => {
                   const p = self.progress;
                   setTimelineProgress(p);
-                  setActiveSectionId('P3: Pinned Story');
                   setActiveSectionProgress(p);
 
-                  // Update active step cleanly
                   const currentIdx = Math.min(STEPS.length, Math.floor(p * STEPS.length) + 1);
                   setActiveStepIndex(currentIdx);
                 },
               },
             });
 
-            const slides = gsap.utils.toArray<HTMLElement>('[data-story-slide]');
-            const texts = gsap.utils.toArray<HTMLElement>('[data-story-text]');
-
-            slides.forEach((slide, idx) => {
-              if (idx > 0) {
-                tl.fromTo(
-                  slide,
-                  { opacity: 0, scale: 1.05 },
-                  { opacity: 1, scale: 1, duration: 1, ease: 'power2.inOut' },
-                  `step-${idx}`
-                );
-                tl.fromTo(
-                  texts[idx],
-                  { opacity: 0, y: 20 },
-                  { opacity: 1, y: 0, duration: 0.8, ease: 'power2.out' },
-                  `step-${idx}`
-                );
-                if (idx > 1) {
-                  tl.to(
-                    slides[idx - 1],
-                    { opacity: 0, duration: 0.6 },
-                    `step-${idx}`
-                  );
-                  tl.to(
-                    texts[idx - 1],
-                    { opacity: 0, y: -20, duration: 0.6 },
-                    `step-${idx}`
-                  );
-                }
-              }
-            });
+            // Sequence steps 1 -> 2 -> 3 -> 4
+            for (let i = 1; i < STEPS.length; i++) {
+              tl.to(slides[i - 1], { opacity: 0, scale: 0.96, duration: 0.6, ease: 'power2.inOut' }, `step-${i}`)
+                .to(texts[i - 1], { opacity: 0, y: -25, duration: 0.5, ease: 'power2.in' }, `step-${i}`)
+                .to(slides[i], { opacity: 1, scale: 1, duration: 0.8, ease: 'power2.out' }, `step-${i}+=0.2`)
+                .to(texts[i], { opacity: 1, y: 0, duration: 0.7, ease: 'power2.out' }, `step-${i}+=0.3`);
+            }
           }
         }, container);
       }
@@ -172,69 +164,61 @@ export function P3PinnedStory() {
         </>
       }
     >
-      <div ref={containerRef} className="relative h-[350vh] w-full bg-[#1A1714]">
+      <div ref={containerRef} className="relative h-[300vh] w-full bg-[#1A1714]">
         <div
           ref={stageRef}
-          className="sticky top-0 flex h-[100svh] w-full items-center justify-center overflow-hidden"
+          className="flex h-[100svh] w-full items-center justify-center p-4 sm:p-6 lg:p-8"
         >
-          {/* Active Mode Banner */}
-          <div className="absolute top-4 left-4 z-20 flex items-center gap-2 rounded-xs border border-[#332E29] bg-[#161412]/90 px-3 py-1.5 font-mono text-xs">
-            <span className={`h-2 w-2 rounded-full ${isBroken ? 'bg-red-500' : 'bg-[#D9911A]'}`} />
-            <span className="font-semibold text-[#F5EDE0]">
-              {isBroken ? config.brokenBadge : config.correctBadge}
-            </span>
-          </div>
-
-          <div className="grid h-full w-full grid-cols-1 items-center gap-8 px-6 lg:grid-cols-12 lg:px-12">
-            {/* Left 6-Col: Step Text Stack */}
-            <div className="relative z-10 lg:col-span-5">
-              {STEPS.map((step, idx) => (
-                <div
-                  key={step.id}
-                  data-story-text
-                  data-step-card
-                  className={`transition-all duration-300 ${
-                    idx + 1 === activeStepIndex ? 'block' : 'hidden lg:block'
-                  }`}
-                  style={{
-                    opacity: idx + 1 === activeStepIndex ? 1 : 0.2,
-                  }}
-                >
-                  <span className="font-mono text-xs font-bold uppercase tracking-widest text-[#D9911A]">
-                    PHASE 0{step.id}
-                  </span>
-                  <h3 className="mt-2 font-display text-2xl font-normal text-[#F5EDE0] sm:text-3xl">
-                    {step.title}
-                  </h3>
-                  <p className="mt-3 text-sm leading-relaxed text-[#C9BFB5]">
-                    {step.detail}
-                  </p>
-                </div>
-              ))}
+          <div className="relative aspect-video w-full max-w-5xl overflow-hidden rounded-sm border border-[#332E29] bg-[#161412] p-6 sm:p-10 shadow-2xl flex items-center">
+            {/* Active Mode Banner */}
+            <div className="absolute top-4 left-4 z-20 flex items-center gap-2 rounded-xs border border-[#332E29] bg-[#161412]/90 px-3 py-1.5 font-mono text-xs backdrop-blur-xs">
+              <span className={`h-2 w-2 rounded-full ${isBroken ? 'bg-red-500' : 'bg-[#D9911A]'}`} />
+              <span className="font-semibold text-[#F5EDE0]">
+                {isBroken ? config.brokenBadge : config.correctBadge}
+              </span>
             </div>
 
-            {/* Right 7-Col: Pinned Photo Crossfade Stack */}
-            <div className="relative aspect-16/10 w-full overflow-hidden rounded-sm border border-[#332E29] bg-[#161412] shadow-xl lg:col-span-7">
-              {STEPS.map((step, idx) => (
-                <div
-                  key={step.id}
-                  data-story-slide
-                  className="absolute inset-0 h-full w-full transition-opacity duration-300"
-                  style={{
-                    opacity: idx + 1 === activeStepIndex ? 1 : 0,
-                    zIndex: idx + 1 === activeStepIndex ? 2 : 1,
-                  }}
-                >
-                  <Image
-                    src={step.image}
-                    alt={step.title}
-                    fill
-                    sizes="(max-width: 1024px) 100vw, 55vw"
-                    className="object-cover"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#1A1714]/80 via-transparent to-transparent" />
-                </div>
-              ))}
+            <div className="grid h-full w-full grid-cols-1 items-center gap-8 lg:grid-cols-12 pt-6">
+              {/* Left 5-Col: Step Text Stack */}
+              <div className="relative z-10 lg:col-span-5 h-[200px] flex items-center">
+                {STEPS.map((step, idx) => (
+                  <div
+                    key={step.id}
+                    className="story-text absolute inset-x-0"
+                  >
+                    <div className="inline-flex items-center gap-2 font-mono text-xs text-[#D9911A]">
+                      <span>STAGE 0{step.id}</span>
+                      <span>/</span>
+                      <span>04</span>
+                    </div>
+                    <h3 className="mt-2 font-display text-2xl sm:text-3xl font-normal text-[#F5EDE0] leading-tight">
+                      {step.title}
+                    </h3>
+                    <p className="mt-3 text-xs sm:text-sm leading-relaxed text-[#C9BFB5]">
+                      {step.detail}
+                    </p>
+                  </div>
+                ))}
+              </div>
+
+              {/* Right 7-Col: Photo Crossfade Stack */}
+              <div className="relative aspect-16/10 w-full overflow-hidden rounded-xs border border-[#332E29] bg-[#161412] shadow-xl lg:col-span-7 h-full max-h-[360px]">
+                {STEPS.map((step) => (
+                  <div
+                    key={step.id}
+                    className="story-slide absolute inset-0 h-full w-full"
+                  >
+                    <Image
+                      src={step.image}
+                      alt={step.title}
+                      fill
+                      sizes="(max-width: 1024px) 100vw, 55vw"
+                      className="object-cover"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#1A1714]/70 via-transparent to-transparent" />
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </div>

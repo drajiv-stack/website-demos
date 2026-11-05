@@ -1,31 +1,35 @@
 @import "tailwindcss";
 
-@theme {
-  --font-display: var(--font-fraunces), serif;
-  --font-sans: var(--font-manrope), sans-serif;
-  --font-mono: var(--font-mono), monospace;
+:root {
+  --bg-charcoal: #1A1714;
+  --accent-turmeric: #D9911A;
+  --text-cream: #F5EDE0;
+  --stone-dim: #A39990;
+  --surface-dark: #221F1B;
+  --border-dark: #332E29;
 }
 
-@layer base {
-  :root {
-    --bg-charcoal: #1A1714;
-    --accent-turmeric: #D9911A;
-    --text-cream: #F5EDE0;
-    --stone-dim: #A39990; /* WCAG 2.1 AA contrast compliant (>4.8:1 on #161412 / #221F1B) */
-    --surface-dark: #221F1B;
-    --border-dark: #332E29;
-  }
+@theme inline {
+  --font-display: var(--font-fraunces), Georgia, serif;
+  --font-sans: var(--font-manrope), system-ui, sans-serif;
+  --font-mono: var(--font-mono), monospace;
+  --color-charcoal: var(--bg-charcoal);
+  --color-turmeric: var(--accent-turmeric);
+  --color-cream: var(--text-cream);
+  --color-stone-dim: var(--stone-dim);
+  --color-surface-dark: var(--surface-dark);
+  --color-border-dark: var(--border-dark);
+}
 
-  body {
-    background-color: var(--bg-charcoal);
-    color: var(--text-cream);
-    font-family: var(--font-manrope), sans-serif;
-    overflow-x: hidden;
-  }
+body {
+  background-color: var(--bg-charcoal);
+  color: var(--text-cream);
+  font-family: var(--font-manrope), system-ui, sans-serif;
+  overflow-x: clip;
 }
 
 .font-display {
-  font-family: var(--font-fraunces), serif;
+  font-family: var(--font-fraunces), Georgia, serif;
 }
 
 /* CSS Scroll-Driven Animation helpers for P6 */
@@ -56,7 +60,6 @@
   }
 }
 
-/* Broken P6 Layout Thrashing simulation transition */
 .layout-thrash-active {
   transition: width 0.05s ease, height 0.05s ease, left 0.05s ease, top 0.05s ease;
 }
