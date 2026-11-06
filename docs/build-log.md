@@ -20,3 +20,4 @@
 Target: under 4-5 hours of your own time per demo for the $150 Basic package to be profitable.
 | lab | Prompt B (Build Scroll Lab) | 2026-11-05 09:18 | 2026-11-05 09:18 | 0.5h | Complete build of 7 dual-mode patterns + Lab HUD |
 | lab | Troubleshooting & Fix Pass | 2026-11-05 10:35 | 2026-11-05 17:22 | 0.5h | Fixed CSS sticky breaking bug (`overflow-x: clip`, removed wrapper `overflow-hidden`), fixed P1 seek queue deadlock, removed P3 React state vs GSAP conflicts, fixed P4 translate bounds, disabled Vercel SSO deployment protection for public access. Production redeployed and verified. |
+| all-demos | Video Integration & Cross-Demo QA Review | 2026-11-06 11:00 | 2026-11-06 11:21 | 0.35h | Full QA audit via reviewer subagent across lab, spices, castings, and textiles. Integrated hero bedroom video loop in textiles, mobile 480p scrub video in spices, and resolved mobile LCP image opacity bug. |

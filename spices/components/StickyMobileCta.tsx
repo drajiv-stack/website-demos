@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
+import { COMPANY } from '@/lib/products';
 
 export function StickyMobileCta() {
   const [visible, setVisible] = useState(false);
@@ -42,7 +43,7 @@ export function StickyMobileCta() {
         {rawWhatsApp ? (
           <a
             href={`https://wa.me/${rawWhatsApp}?text=${encodeURIComponent(
-              'Hello Elakkaya Spice Exports, I would like to request an export quote.'
+              `Hello ${COMPANY.name}, I would like to request an export quote.`
             )}`}
             target="_blank"
             rel="noopener noreferrer"

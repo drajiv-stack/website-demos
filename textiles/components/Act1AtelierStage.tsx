@@ -28,12 +28,15 @@ export function Act1AtelierStage({ lang }: { lang: Locale }) {
     const desktopMq = window.matchMedia('(min-width: 768px)').matches;
     setIsMobile(!desktopMq);
 
-    const videoTimer = window.setTimeout(
-      () => setMountVideo(true),
-      desktopMq ? 120 : 3500
-    );
+    // Mount desktop video loop after initial paint (120ms); mobile (< 768px) keeps poster only per AGENTS.md
+    let videoTimer: number | undefined;
+    if (desktopMq && !prefersReduced) {
+      videoTimer = window.setTimeout(() => setMountVideo(true), 120);
+    }
 
-    if (prefersReduced || !desktopMq) return () => window.clearTimeout(videoTimer);
+    if (prefersReduced || !desktopMq) return () => {
+      if (videoTimer) window.clearTimeout(videoTimer);
+    };
 
     let ctx: { revert: () => void } | undefined;
 
@@ -166,11 +169,9 @@ export function Act1AtelierStage({ lang }: { lang: Locale }) {
                   height={720}
                   fetchPriority="high"
                   decoding="sync"
-                  className={`h-full w-full object-cover object-center transition-opacity duration-700 ${
-                    videoReady ? 'opacity-0' : 'opacity-100'
-                  }`}
+                  className="h-full w-full object-cover object-center"
                 />
-                {mountVideo && (
+                {mountVideo && !isMobile && (
                   <video
                     muted
                     playsInline
@@ -181,18 +182,12 @@ export function Act1AtelierStage({ lang }: { lang: Locale }) {
                     onLoadedData={() => setVideoReady(true)}
                     onCanPlay={() => setVideoReady(true)}
                     aria-hidden="true"
-                    className={`absolute inset-0 h-full w-full object-cover object-center transition-opacity duration-700 ${
-                      videoReady ? 'opacity-100' : 'opacity-0'
+                    className={`pointer-events-none absolute inset-0 h-full w-full object-cover object-center transition-opacity duration-1000 ${
+                      videoReady ? 'opacity-85' : 'opacity-0'
                     }`}
                   >
-                    {isMobile ? (
-                      <source src="/video/hero-bedroom-mobile.mp4" type="video/mp4" />
-                    ) : (
-                      <>
-                        <source src="/video/hero-bedroom-desktop.webm" type="video/webm" />
-                        <source src="/video/hero-bedroom-desktop.mp4" type="video/mp4" />
-                      </>
-                    )}
+                    <source src="/video/hero-bedroom-desktop.webm" type="video/webm" />
+                    <source src="/video/hero-bedroom-desktop.mp4" type="video/mp4" />
                   </video>
                 )}
               </div>

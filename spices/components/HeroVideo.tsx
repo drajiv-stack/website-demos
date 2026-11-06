@@ -12,8 +12,10 @@ export function HeroVideo() {
   const [scrollProgress, setScrollProgress] = useState(0);
   const [isReducedMotion, setIsReducedMotion] = useState(false);
   const [videoLoaded, setVideoLoaded] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
+    setIsMobile(window.innerWidth < 768);
     const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (prefersReduced) {
       setIsReducedMotion(true);
@@ -168,8 +170,14 @@ export function HeroVideo() {
             aria-hidden="true"
             className="h-full w-full object-cover object-center"
           >
-            <source src="/video/cardamom-split-720p.webm" type="video/webm" />
-            <source src="/video/cardamom-split-720p.mp4" type="video/mp4" />
+            {isMobile ? (
+              <source src="/video/cardamom-split-480p.mp4" type="video/mp4" />
+            ) : (
+              <>
+                <source src="/video/cardamom-split-720p.webm" type="video/webm" />
+                <source src="/video/cardamom-split-720p.mp4" type="video/mp4" />
+              </>
+            )}
           </video>
 
           {/* 10% dark veil over video for contrast */}
