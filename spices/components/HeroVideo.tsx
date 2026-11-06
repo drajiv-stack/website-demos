@@ -8,6 +8,7 @@ export function HeroVideo() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const isSeekingRef = useRef(false);
   const targetTimeRef = useRef(0);
+  const watchdogRef = useRef<NodeJS.Timeout | null>(null);
   const [scrollProgress, setScrollProgress] = useState(0);
   const [isReducedMotion, setIsReducedMotion] = useState(false);
   const [videoLoaded, setVideoLoaded] = useState(false);
@@ -24,11 +25,18 @@ export function HeroVideo() {
 
     // Handle seeked event queue to eliminate browser decode lag during scroll
     const onSeeked = () => {
+      if (watchdogRef.current) {
+        clearTimeout(watchdogRef.current);
+        watchdogRef.current = null;
+      }
       isSeekingRef.current = false;
       const target = targetTimeRef.current;
       if (video && Math.abs(video.currentTime - target) > 0.04) {
         isSeekingRef.current = true;
         video.currentTime = target;
+        watchdogRef.current = setTimeout(() => {
+          isSeekingRef.current = false;
+        }, 200);
       }
     };
 
@@ -36,9 +44,15 @@ export function HeroVideo() {
 
     const requestSeek = (time: number) => {
       targetTimeRef.current = time;
+      if (video && Math.abs(video.currentTime - time) < 0.03) return;
+
       if (!isSeekingRef.current && video && !isNaN(video.duration) && video.readyState >= 2) {
         isSeekingRef.current = true;
         video.currentTime = time;
+        if (watchdogRef.current) clearTimeout(watchdogRef.current);
+        watchdogRef.current = setTimeout(() => {
+          isSeekingRef.current = false;
+        }, 200);
       }
     };
 
@@ -70,6 +84,7 @@ export function HeroVideo() {
 
     return () => {
       isMounted = false;
+      if (watchdogRef.current) clearTimeout(watchdogRef.current);
       video.removeEventListener('seeked', onSeeked);
       ctx?.revert();
     };

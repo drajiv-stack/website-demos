@@ -28,7 +28,12 @@ export function Act1AtelierStage({ lang }: { lang: Locale }) {
     const desktopMq = window.matchMedia('(min-width: 768px)').matches;
     setIsMobile(!desktopMq);
 
-    if (prefersReduced || !desktopMq) return;
+    const videoTimer = window.setTimeout(
+      () => setMountVideo(true),
+      desktopMq ? 120 : 3500
+    );
+
+    if (prefersReduced || !desktopMq) return () => window.clearTimeout(videoTimer);
 
     let ctx: { revert: () => void } | undefined;
 
@@ -72,6 +77,7 @@ export function Act1AtelierStage({ lang }: { lang: Locale }) {
     );
 
     return () => {
+      window.clearTimeout(videoTimer);
       ctx?.revert();
     };
   }, []);
@@ -160,8 +166,35 @@ export function Act1AtelierStage({ lang }: { lang: Locale }) {
                   height={720}
                   fetchPriority="high"
                   decoding="sync"
-                  className="h-full w-full object-cover object-center"
+                  className={`h-full w-full object-cover object-center transition-opacity duration-700 ${
+                    videoReady ? 'opacity-0' : 'opacity-100'
+                  }`}
                 />
+                {mountVideo && (
+                  <video
+                    muted
+                    playsInline
+                    loop
+                    autoPlay
+                    preload="metadata"
+                    poster="/images/hero/hero-macro-to-room.webp"
+                    onLoadedData={() => setVideoReady(true)}
+                    onCanPlay={() => setVideoReady(true)}
+                    aria-hidden="true"
+                    className={`absolute inset-0 h-full w-full object-cover object-center transition-opacity duration-700 ${
+                      videoReady ? 'opacity-100' : 'opacity-0'
+                    }`}
+                  >
+                    {isMobile ? (
+                      <source src="/video/hero-bedroom-mobile.mp4" type="video/mp4" />
+                    ) : (
+                      <>
+                        <source src="/video/hero-bedroom-desktop.webm" type="video/webm" />
+                        <source src="/video/hero-bedroom-desktop.mp4" type="video/mp4" />
+                      </>
+                    )}
+                  </video>
+                )}
               </div>
 
               {/* Layer 2: Unfolding Macro Weave Texture Overlay (fades out on scroll to reveal the room) */}
